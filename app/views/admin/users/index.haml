@@ -1,0 +1,23 @@
+=javascript_include_tag 'admin/users'
+
+
+=form_tag search_user_admin_users_path, method: :post, remote: true do
+  .row
+    .col-md-8
+      = text_field_tag :organization_name,'',class: 'form-control', placeholder: 'Введите МО'
+    .col-md-4
+      = select_tag :role, options_from_collection_for_select(User::ROLES, :first, :last),class: 'form-control'
+  %p
+  .row
+    .col-md-4
+      = text_field_tag :email,'',class: 'form-control', placeholder: 'Введите email'
+    .col-md-4
+      = text_field_tag :username,'',class: 'form-control', placeholder: 'Введите логин'
+    .col-md-4
+      = text_field_tag :fio,'',class: 'form-control', placeholder: 'Введите ФИО'
+  %p
+  .row
+    .pull-right
+      = submit_tag 'Поиск', class: 'btn btn-sm btn-primary'
+#list
+  =render 'user_list'

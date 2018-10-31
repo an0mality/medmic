@@ -1,0 +1,27 @@
+!!!
+%html
+  %head
+    %meta{:content => "text/html; charset=UTF-8", "http-equiv" => "Content-Type"}/
+    %title Mednet
+    = csrf_meta_tags
+    = stylesheet_link_tag    'application', media: 'all', 'data-turbolinks-track' => 'reload'
+    = javascript_include_tag 'admin/application', 'data-turbolinks-track' => 'reload'
+    = javascript_include_tag  'bootstrap'
+
+  %body
+    .spinner
+      =image_tag("loading.gif")
+
+    .wrapper
+      = render 'shared/top_welcome'
+      #content
+        = flash_messages
+        .panel.panel-default
+          .panel-body
+            .row
+              .col-md-10.col-md-offset-1
+                = yield
+:javascript
+  $(document).ready(function(){
+    $(".spinner").hide();
+  });

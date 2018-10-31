@@ -1,0 +1,10 @@
+.row
+  .col-md-12
+    %h1 Сообщения на экраны пользователя
+.row
+  .col-md-12
+    = render 'sidebar'
+.row
+  .col-md-12
+    = render 'form', act: NotifyMessage.new, url:  notify_index_path, met: 'post',
+      namebtn: 'Создать сообщение', opt1: { :selected => @notifymessage.recipient_user_id.present? ? @notifymessage.recipient_user_id : nil}

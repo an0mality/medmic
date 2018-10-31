@@ -1,0 +1,240 @@
+=render 'shared/help'
+=render 'shared/about'
+.navbar.navbar-default
+  .container-fluid
+    %button.navbar-toggle(type="button" data-toggle="collapse" data-target=".navbar-responsive-collapse")
+      %span.icon-bar
+      %span.icon-bar
+      %span.icon-bar
+
+    -#%a.navbar-brand{href: root_path}
+    -#
+    -#  %img{:alt => "Mednet"}/
+
+    .navbar-collapse.collapse.navbar-responsive-collapse
+
+      %ul.nav.navbar-nav
+        %li
+          = image_tag("mednet.png",style:" width: 160px;", alt: "logo")
+        %li{class: (request.path == root_path ? 'active' : '')}
+          =link_to root_path, title: 'Перейти в Мой профиль' do
+            =fa_icon 'home'
+
+
+        %li{class: ((params[:controller].match('document').present? && params[:controller].match('admin').blank? )  ? 'active' : '')}
+          %a{:href => documents_path} Документы
+
+
+        -if current_user.present? && current_user.rmis && !current_user.mz
+          %li.dropdown{class: ((params[:controller].match('pharmacy').present?|| params[:controller].match('medical_product').present?) ? 'active' : '')}
+            %a.dropdown-toggle{"aria-expanded" => "false", "aria-haspopup" => "true", "data-toggle" => "dropdown", :href => "#", :role => "button"}
+              Аптека
+              %span.caret
+            %ul.dropdown-menu
+              %li
+                %a{href: pharmacy_need_index_path} Лекарственные препараты
+              %li
+                %a{href: medical_product_need_index_path} Медицинские изделия
+
+        -if current_user.present? && current_user.rmis && current_user.mz
+
+          %li.dropdown{class: ((params[:controller].match('pharmacy').present?|| params[:controller].match('medical_product').present?) ? 'active' : '')}
+            %a.dropdown-toggle{"aria-expanded" => "false", "aria-haspopup" => "true", "data-toggle" => "dropdown", :href => "#", :role => "button"}
+              Аптека
+              %span.caret
+            %ul.dropdown-menu
+              %li
+                %a{href: index_mz_pharmacy_need_index_path} Лекарственные препараты
+              %li
+                %a{href: index_mz_medical_product_need_index_path} Медицинские изделия
+
+
+        -if current_user.present? && ((can? :manage, Recipe) || (can? :manage, Sector))
+          %li.dropdown{class: (params[:controller].match('feed').present? ? 'active' : '')}
+            %a.dropdown-toggle{"aria-expanded" => "false", "aria-haspopup" => "true", "data-toggle" => "dropdown", :href => "#", :role => "button"}
+              Детское питание
+              %span.caret
+            %ul.dropdown-menu
+              -if (can? :manage, Recipe) && !current_user.mz
+                %li
+                  %a{href: feed_patient_feed_index_path} Выписать рецепт
+                %li.divider{:role => "separator"}
+              -if (can? :manage, Sector) || (can? :manage, Recipe) || current_user.mz && current_user.feed
+                %li
+                  %a{href:  all_feed_report_index_path} Отчетность
+              -if can? :manage, Sector
+                %li.divider{:role => "separator"}
+                %li
+                  %a{href: sectors_feed_admin_feed_index_path} Участки и врачи
+
+
+        - if current_user.present? && !current_user.blocks?&& (current_user.admin || current_user.mz&&current_user.mse || current_user.moderator|| current_user.mse)
+          %li.dropdown{class: (params[:controller].match('mse').present? ? 'active' : '')}
+            %a.dropdown-toggle{"aria-expanded" => "false", "aria-haspopup" => "true", "data-toggle" => "dropdown", :href => "#", :role => "button"}
+              МСЭ
+              %span.caret
+            %ul.dropdown-menu
+              -if current_user.present?&& !(current_user.admin && current_user.mz)&&((can? :manage, PrgRhb) || (can? :manage, MsePatient))
+                %li
+                  %a{:href => new_card_mse_patient_index_path(prg_rhbs: false)} Карты ИПРА
+              -if current_user.present?&& (current_user.admin || current_user.mz || current_user.moderator || current_user.mse)
+                %li
+                  %a{:href => monitoring_mse_report_index_path(prg_rhbs: false)} Отчетность
+
+        %li{class: (request.path ==  ahd_path ? "active" : " ")}
+          = link_to  ahd_path do
+            %i.fa.fa-exchange
+            Конвертор АХД
+
+
+        - if can? :manage, FrmrDocument
+          %li.dropdown{class: params[:controller].match('frmr').present? ? 'active' : ''}
+            %a.dropdown-toggle{"aria-expanded" => "false", "aria-haspopup" => "true", "data-toggle" => "dropdown", :href => "#", :role => "button"}
+              Регистр врачей ДЛО
+              %span.caret
+            %ul.dropdown-menu
+              -if current_user.frmr && !current_user.mz
+                %li
+                  %a{href: frmr_doctors_path} Список врачей
+                %li.divider{role: 'separator'}
+                -#%li
+                -#  %a{href: frmr_incoming_documents_path} Ответы из МИАЦ
+                %li
+                  %a{href: frmr_outcoming_documents_path} Мои документы
+                %li.divider{role: 'separator'}
+                %li
+                  %a{href: speciality_frmr_hdbk_index_path} Справочники
+
+              -if current_user.frmr && current_user.mz || current_user.admin
+                %li
+                  %a{href: admin_frmr_doctors_path} Список врачей
+                %li.divider{role: 'separator'}
+                %li
+                  %a{href: dlo_doctor_admin_frmr_doctors_path} Врачи ДЛО
+                %li.divider{role: 'separator'}
+                -#%li
+                -#  %a{href: admin_frmr_outcoming_documents_path} Исходящие документы
+                %li
+                  %a{href: admin_frmr_incoming_documents_path} Входящие документы
+                %li.divider{role: 'separator'}
+                %li
+                  %a{href: admin_frmr_hdbk_speciality_index_path} Справочники
+
+
+
+        - if can? :manage, Analysis, Registry
+          %li.dropdown{class: params[:controller].match('vpch').present? ? 'active':''}
+            -#{class: controller_admin? ? 'active': ''}
+            %a.dropdown-toggle{"aria-expanded" => "false", "aria-haspopup" => "true", "data-toggle" => "dropdown", :href => "#", :role => "button"}
+              ВПЧ
+              %span.caret
+            %ul.dropdown-menu
+              - if current_user.vpch && !current_user.mz || current_user.admin
+                %li
+                  %a{href: vpch_analyses_path} Создать направление
+                %li.divider{:role => "separator"}
+
+                %li
+                  %a{href: vpch_registries_path} Работа с реестрами
+                %li.divider{:role => "separator"}
+              - if current_user.spid || current_user.onko || current_user.admin
+                %li
+                  %a{href: vpch_result_index_path} Работа с результатами
+                %li.divider{:role => "separator"}
+              %li
+                %a{href: vpch_report_index_path} Отчетность
+
+      %ul.nav.navbar-nav.navbar-right
+        %li.dropdown
+          %a.dropdown-toggle{"aria-expanded" => "false", "aria-haspopup" => "true", "data-toggle" => "dropdown", :href => "#", :role => "button"}
+            Помощь
+            %span.caret
+          %ul.dropdown-menu
+            %li
+              %a{"data-toggle" => "modal", :href => "#helpModal", :role => "button"} Связаться с нами
+            -#- if current_user
+            -if can? :manage, NotifyMessage
+              - if !current_user.admin
+                %li
+                  %a{href: new_request_path} Создать заявку
+            %li.divider{:role => "separator"}
+            %li
+              %a{"data-toggle" => "modal", :href => "#aboutModal", :role => "button"} О программе
+
+        - if can? :manage, :all
+          %li.dropdown{class: params[:controller].match('admin').present? ? 'active':''}
+            -#{class: controller_admin? ? 'active': ''}
+            %a.dropdown-toggle{"aria-expanded" => "false", "aria-haspopup" => "true", "data-toggle" => "dropdown", :href => "#", :role => "button"}
+              Панель администратора
+              %span.caret
+            %ul.dropdown-menu
+              %li
+                %a{href: admin_monitoring_index_path} Мониторинг
+              %li
+                %a{href: admin_documents_path} Документы
+              %li
+                %a{href: admin_organizations_path} Организации
+              %li
+                %a{href: admin_sectors_path} Детское питание
+              %li
+                %a{href: admin_users_path} Управление пользователями
+
+        - if current_user
+          %li.dropdown
+            %a.dropdown-toggle{"aria-expanded" => "false", "aria-haspopup" => "true", "data-toggle" => "dropdown", :href => "#", :role => "button"}
+
+              -available_module(current_user).each do |a|
+                =a
+              =current_user.fio
+
+
+              -#Dropdown
+              %span.caret
+            %ul.dropdown-menu
+              
+              %li
+                =link_to profile_main_index_path, title: 'Перейти в Мой профиль' do
+                  %i.fa.fa-info-circle
+                  Мой профиль
+              - if current_user.admin
+                %li
+                  =link_to notify_index_path, title: 'Мои сообщения' do
+                    %i.fa.fa-envelope
+                    Мои сообщения
+
+              - if current_user.admin || current_user.vpch || current_user.mse || current_user.feed || current_user.mz || current_user.blocks || current_user.moderator || current_user.onko || current_user.spid|| current_user.rmis|| current_user.frmr
+                %li
+                  =link_to request_index_path, title: 'Мои заявки' do
+                    %i.fa.fa-exchange
+                    Мои заявки
+              - if current_user.moderator
+                %li
+                  =link_to employee_main_index_path, title: 'Мои пользователи' do
+                    %i.fa.fa-user-circle
+                    Мои пользователи
+
+
+
+              %li.divider{:role => "separator"}
+              %li
+                =link_to destroy_user_session_path, :method => :delete, title: 'Выйти из аккаунта' do
+                  %i.fa.fa-sign-out
+                  Выход
+        -else
+          %li.dropdown
+            %a.dropdown-toggle{'aria-expanded'=> 'false', 'aria-hashpopup'=>'true', 'data-toggle'=>'dropdown', :href=>'#', :role=> 'button'}
+              Вход в систему
+              %span.caret
+            
+            %ul.dropdown-menu            
+              %li= link_to "Вход в систему", new_user_session_path
+              %li.divider{:role => "separator"}
+              %li= link_to "Регистрация", new_user_registration_path              
+              %li= link_to "Не получили письмо с подтверждением регистрации?", new_user_confirmation_path
+              - if controller_name=='devise' && devise_mapping.lockable? && resource_class.unlock_strategy_enabled?(:email) && controller_name != 'unlocks'
+                %li= link_to "Не получили письмо с инструкциями по разблокировке ?", new_unlock_path(resource_name)
+              
+              %li.divider{:role => "separator"}
+              %li= link_to "Я забыл пароль", new_user_password_path
+
+

@@ -1,0 +1,7 @@
+-#=javascript_include_tag 'notify'
+%ul.nav.nav-tabs{style: 'padding: 1em'}
+  %li{class: (request.path == new_notify_path && @notifymessage.present? || params[:id].present?) ? 'active' : ''}
+    = link_to 'Написать', new_notify_path
+  %li{class: request.path == notify_index_path ? 'active' : ''}
+    = link_to 'Список', notify_index_path
+

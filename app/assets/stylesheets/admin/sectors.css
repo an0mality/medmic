@@ -1,0 +1,7 @@
+tr.old{
+  background-color: #fcf8e3;
+}
+
+tr div.old{
+    text-decoration:line-through;
+}

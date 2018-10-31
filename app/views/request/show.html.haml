@@ -1,0 +1,76 @@
+.row
+  .col-md-3
+  .col-md-9
+    %h3 Форма просмотра заявки
+  .row
+    - unless current_user.admin
+      .col-md-3
+        = render 'sidebar'
+    .col-md-3
+    .col-md-9
+      .container-message-head
+        .container-message
+          %strong
+            %i.fa.fa-calendar
+            - unless current_user.admin
+              Дата создания:
+              #{I18n.l (@request.begin_at+3.hour), format: :short}
+            - else
+              Период:
+              c  #{I18n.l (@request.begin_at+3.hour), format: :short}
+              по #{I18n.l (@request.end_at+3.hour), format: :short}
+            ,
+            %i.fa.fa-user-md
+            = User.find(@request.user_id).fio
+            ,
+            %i.fa.fa-envelope-o.fa-fw
+            = User.find(@request.user_id).email
+            ,
+            %i.fa.fa-phone
+            = User.find(@request.user_id).phone
+            ,
+            %i.fa.fa-university
+            -#=Organization.find(InfoDesk.find_by_user_id(@request.created_user_id).organization_id).name
+            =Organization.find(User.find(@request.user_id).organization_id).name
+
+        .row
+          .col-md-8
+            %br
+              .chat
+                = @request.message.html_safe
+          .col-md-3.col-md-offset-1
+            %br
+              - if @request.end_at <= DateTime.now+3.hour
+                .show_theme.green_color.text-center
+                  Тема:
+                  =@request.theme.name
+                  .show_status.text-center
+                    Статус: Выполнен
+              - else
+                .show_theme.red_color.text-center
+                  Тема:
+                  =@request.theme.name
+                  .show_status.text-center
+                    Статус: В работе
+              %br
+              - unless @request.allow_closed
+                - if current_user.admin
+                  = link_to closing_request_request_path(@request), method: :post, title: 'Закрыть заявку', class: 'btn btn-success btn-block ' do
+                    %i.fa.fa-check-square-o
+                    Закрыть заявку
+              %br
+      .btn-group.btn-group-justified
+        = link_to '< Вернуться к открытым', request_index_path, class: 'btn btn-primary'
+        = link_to 'Вернуться к закрытым >', closed_request_index_path, class: 'btn btn-primary'
+
+
+
+
+
+
+
+
+
+
+
+

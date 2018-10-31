@@ -1,0 +1,36 @@
+= javascript_include_tag  'frmr/doctors.js'
+.row
+  .col-md-12
+    %center
+      %h3 Медицинские работники для #{current_user.organization.name}
+
+%br
+.row
+  = form_tag search_frmr_doctors_path, method: :post, remote: true do
+    .col-md-4
+      = text_field_tag :surname,'', class: 'form-control',placeholder: 'Введите фамилию мед.работника'
+    .col-md-3
+      = text_field_tag :code, '', class: 'form-control',placeholder: 'Введите код мед.работника'
+    .col-md-5
+      = button_tag(type: 'submit', class: 'btn btn-sm btn-primary') do
+        %i.fa.fa-search
+        Поиск
+      = link_to frmr_doctors_path, class: 'btn btn-sm btn-danger' do
+        %i.fa.fa-id-card-o
+        Показать весь список
+      = link_to xls_frmr_doctors_path, class: 'btn btn-sm btn-success', :target => :blank do
+        %i.fa.fa-angle-double-down
+        Выгрузить список в формате XLS
+%br
+.row
+  #doctors_list
+    = render 'doctors_list'
+
+-#:javascript
+-#  $('#surname').autocomplete({
+-#    minLength: 3,
+-#    source: "/frmr/doctors/search_surname"
+-#
+-#  });
+
+

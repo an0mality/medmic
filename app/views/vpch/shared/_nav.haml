@@ -1,0 +1,10 @@
+%ul.nav.nav-tabs
+  %li{class: (request.path == info_vpch_analyses_path ? "active" : "")}
+    = link_to "Главная информация", info_vpch_analyses_path(lsd_id: @lsd_patient.id)
+
+  %li{class: request.path == new_vpch_analysis_path ? "active" : ""}
+    = link_to "Карта посещения", new_vpch_analysis_path(lsd_id: @lsd_patient.id)
+
+
+  %li{class: request.path == last_reception_vpch_analyses_path ? "active" : ""}
+    = link_to "Предыдущие посещения", last_reception_vpch_analyses_path(lsd_id: @lsd_patient.id)

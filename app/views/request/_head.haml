@@ -1,0 +1,7 @@
+.col-md-9
+  %ul.nav.nav-tabs
+    %li{class: request.path == request_index_path ? "active" : " "}
+      = link_to 'Открытые', request_index_path
+    %li{class: request.path == closed_request_index_path ? "active" : " "}
+      = link_to 'Закрытые', closed_request_index_path, method: :get
+  %br

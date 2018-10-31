@@ -1,0 +1,16 @@
+.well
+  %center
+    %h1 Данная страница не найдена. Вы перешли по неправильной ссылке.
+    %h2 Переход на #{link_to 'главную страницу', root_path}
+    - if current_user.present?
+      %h2
+        %p Написать заявку в  #{link_to 'Техническую поддержку', new_request_path}
+        %p Для перехода к своему модулю используйте меню в верхней части браузера.
+
+%section.error-container
+  %span
+    %span 4
+  %span 0
+  %span
+    %span 4
+

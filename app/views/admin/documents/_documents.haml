@@ -1,0 +1,12 @@
+- if @documents.present?
+  %table.table.table-hover.table-condensed      
+    - @documents.each do |doc|
+      %tr{id: "remove_doc_#{doc.id}"}
+        %td
+          %i.fa-fw.fa.fa-calendar
+          = I18n. l doc.created_at, format: '%d/%m/%Y'
+        %td= link_to doc.filename, document_path(doc)
+        %td
+          -if can? :manage, Document
+            = link_to admin_document_path(doc), method: :delete, remote: :true,data: {confirm: 'Вы уверены, что хотите удалить документ?'}, class: 'btn btn-sm btn-danger' do
+              %i.fa.fa.fa-trash-o

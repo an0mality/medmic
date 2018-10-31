@@ -1,0 +1,24 @@
+- if current_user.present? && current_user.admin
+  .container-fluid
+    .row{style: 'margin-top: 10px;'}
+      .col-md-12
+        %nav.top.navbar.navbar-default
+          .container-fluid
+            %ul.nav.navbar-nav
+              %li{class: (request.path == admin_document_index_path ? 'active' : '')}
+                %a{:href => admin_document_index_path} Документы
+
+              %li.divider{:role => "separator"}
+              %li
+                %a{:href => "#"} Женские консультации
+              %li.divider{:role => "separator"}
+              %li
+                %a{:href => "#"} Детское питание
+              %li.divider{:role => "separator"}
+              %li
+                %a{:href => root_path} На сайт
+              %li.divider{:role => "separator"}
+              %li
+                =link_to destroy_user_session_path, :method => :delete, title: 'Выйти из аккаунта' do
+                  %i.fa.fa-sign-out
+                  Выход

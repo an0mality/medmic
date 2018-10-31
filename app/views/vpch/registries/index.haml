@@ -1,0 +1,14 @@
+.col-xs-12.col-md-12
+  = render '/vpch/shared/nav_registry'
+  %br
+  .row
+    = form_tag vpch_registries_path, method: :get, remote: true do
+      .col-md-2
+        = text_field_tag :registry_key,'', placeholder: 'Поиск по ключу реестра', class: 'form-control'
+      .col-md-2
+        = submit_tag 'Поиск', class: 'btn btn-sm btn-primary'
+  %br
+  .row
+    - if @analyses.present? || @registry.present?
+      #table
+        = render '/vpch/shared/table_registries'

@@ -1,0 +1,28 @@
+%h4 Вам пришло новое сообщение на сайте Mednet
+%p
+  ==========================================
+%p
+  Тема сообщения:
+  %span
+    %i=@notify.theme.name
+%p
+  ==========================================
+%p
+  Описание проблемы:
+  %span
+    %i=@notify.message.html_safe
+%p
+  ==========================================
+%p
+  ФИО:
+  %span
+    %i=User.find(@notify.user_id).fio
+%p
+  Адрес электронной почты:
+  %span
+    %i=User.find(@notify.user_id).email
+%p
+  Телефон:
+  %span
+    %i=User.find(@notify.user_id).phone
+

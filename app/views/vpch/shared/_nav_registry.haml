@@ -1,0 +1,12 @@
+%ul.nav.nav-tabs
+  %li{class: (request.path == vpch_registries_path || params[:id].present?) ? "active": " "}
+    = link_to "Последние 5 реестра", vpch_registries_path
+  %li{class: request.path == new_vpch_registry_path ? "active": " "}
+    = link_to "Новый реестр", new_vpch_registry_path
+
+
+
+  -#%li{class: params[:all].present? ? "active": " "}
+  -#  = link_to "Все реестры", vpch_registries_path(all: 'all')
+  -#%li{class: params[:one].present? ? "active": "disable"}
+  -#  = link_to "Список пациентов в реестре #{@registry.present? ? @registry.name : ' '}"

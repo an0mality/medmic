@@ -1,0 +1,100 @@
+.row
+  .col-md-12
+    #table_result
+      - if current_user.onko
+        .pull-right.text-success
+          Обратите внимание! Записи, выделенные зеленым цветом, уже занесены в систему RMIS.
+      %table.table.table-bordered
+        %tr.info
+          %th № п/п
+          -if current_user.onko || current_user.spid
+            %th.text-center
+              %span.glyphicon.glyphicon-ok-sign
+          -if current_user.spid
+            %th.text-center
+              %span.glyphicon.glyphicon-print
+          %th.text-center
+            ID пациента
+          %th.text-center
+            Фамилия Имя Отчество
+          %th.text-center
+            Адрес
+          %th.text-center
+            Документы
+          - if request.path == vpch_result_path
+            %th.text-center
+              Выставить результат анализа
+          - else
+            %th.text-center
+              Дата приема
+        - @analysis.each_with_index do |patient, index|
+          - patient_info = LsdPatient.patient_info(patient.patient_id)
+          - if patient_info.present?
+            - individual = patient_info.address
+            %tr{data_id: patient.id, class:(current_user.onko && patient.onko_confirm)? 'success': ''}
+              %td.text-center=index+1
+              -if current_user.onko
+                %td.text-center
+                  - if patient.onko_confirm == false
+                    = check_box_tag 'onko_confirm', patient.onko_confirm , patient.onko_confirm, {disabled: patient.onko_confirm}
+              -if current_user.spid
+                %td.text-center
+                  -#= best_in_place patient, :spid_confirm, as: :check_box, url: vpch_result_path(patient)
+                  = check_box_tag 'confirm', patient.spid_confirm, patient.spid_confirm
+                %td.text-center
+                  = check_box_tag 'print'
+              %td.text-center
+                = patient.analys_key
+              %td
+                = patient_info.full_name
+                %br
+                %i.fa.fa-calendar
+                = I18n.l patient_info.birth_dt, format: "%d.%m.%Y"
+              %td
+                = individual.present? ? patient_info.address : "Не указан"
+              %td
+                = patient_info.list_identity_doc
+                %br
+                %br
+                %br
+                - if patient_info.polis_doc.present?
+                  - patient_info.polis_doc.each do |polis|
+                    #{polis[:name]}, #{polis[:series]}, #{polis[:number]}, #{polis[:org]}
+              - if request.path == vpch_result_path
+                %td
+                  - if current_user.spid || current_user.admin
+                    = label_tag 'Ключ анализа:'
+                    = best_in_place patient, :key_spid, as: :input, url: vpch_analysis_path(patient), placeholder: "нажмите здесь..."
+                    %br
+                    = best_in_place patient, :cat_vpch_id, as: :select, collection: CatVpch.all.to_a.map{|a| [a.id,a.name]}, url: vpch_analysis_path(patient), class: 'form-control'
+                  - if current_user.onko || current_user.admin
+                    = best_in_place patient, :cat_citology_id, as: :select, collection: CatCitology.all.to_a.map{|a| [a.id,a.name]}, url: vpch_analysis_path(patient), class: 'form-control'
+              - else
+                %td
+                  = I18n.l patient.reception_at, format: '%d-%m-%y'
+                %td
+                  = link_to print_vpch_analysis_path(patient.id, href: params[:controller], reg_id: patient.registry_id), data: {confirm: 'Вывести на печать направления для пациента?'}, title: 'Нажмите, чтобы напечатать направление', class: 'btn btn-default btn-sm' do
+                    %i.fa.fa-print
+                    Печать направления
+                  = link_to print_vpch_analysis_path(patient.id, href: params[:controller], reg_id: patient.registry_id, to: 'onko' ), data: {confirm: 'Вывести на печать направления на Цитологию для пациента?'}, title: 'Нажмите, чтобы напечатать направление', class: 'btn btn-default btn-sm' do
+                    %i.fa.fa-print
+                    Печать направления на Цитологию
+                  %br
+                  %br
+                    = link_to delete_patient_from_reestr_vpch_analysis_path(patient), method: :post, class: 'btn btn-sm btn-warning', title: 'Нажмите, чтобы исключить пациента из реестра' do
+                      %i.fa.fa-minus
+          - else
+            %tr{data_id: patient.id, class:(current_user.onko && patient.onko_confirm)? 'success': ''}
+              %td.text-center=index+1
+              %td.text-center=patient.analys_key
+              %td{colspan:3}
+                .text-center.text-danger
+                  Пациент не найдет в базе РМИС
+              %td= I18n.l patient.reception_at, format: '%d-%m-%y'
+              %td
+                = link_to delete_patient_from_reestr_vpch_analysis_path(patient), method: :post, class: 'btn btn-sm btn-warning', title: 'Нажмите, чтобы исключить пациента из реестра' do
+                  %i.fa.fa-minus
+
+
+:javascript
+  $(".spinner").hide();

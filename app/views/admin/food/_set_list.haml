@@ -1,0 +1,23 @@
+.row
+  .col-md-12
+    %table.table.table-bordered.table-condensed.table-hovered.table-hover
+      %thead
+        %tr.info
+          %th.text-center №
+          %th.text-center Наименование набора
+          %th.text-center Старый
+          %th.text-center Действия
+      %tbody
+
+        - @sets.each_with_index do |set,index|
+          %tr{id: "id_#{set.id}"}
+            %td.text-center
+              = index+1
+            %td.text-center
+              = best_in_place set, :name, as: :input, url: admin_food_path(set)
+            %td.text-center
+              = best_in_place set, :old, as: :checkbox, url: admin_food_path(set),  collection: {false: 'Нет', true: 'Да'}
+            %td.text-center
+              = link_to admin_food_path(set), method: :delete, data: { :confirm => 'Вы уверены, что хотите удалить '+ set.name+ '?' }, remote: true, class: 'btn btn-danger' do
+                %i.fa.fa.fa-trash-o
+                Удалить

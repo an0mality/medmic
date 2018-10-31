@@ -1,0 +1,10 @@
+=javascript_include_tag 'frmr/hdbk.js'
+%ul.nav.nav-tabs
+  %li{class: request.path == speciality_frmr_hdbk_index_path ? "active" : ""}
+    = link_to speciality_frmr_hdbk_index_path do
+      %i.fa.fa-stethoscope
+      Специальности
+  %li{class: request.path == position_frmr_hdbk_index_path ? "active" : ""}
+    = link_to position_frmr_hdbk_index_path do
+      %i.fa.fa-user-md
+      Должности

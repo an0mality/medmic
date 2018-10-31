@@ -1,0 +1,19 @@
+.row{style: 'margin: 5%; margin-top: 10%; '}
+  .col-md-6.col-md-offset-3
+    .panel.panel-info
+      .panel-heading
+        %h3 Форма восстановления пароля
+      .panel-body
+        = form_for(resource, as: resource_name, url: password_path(resource_name), html: { method: :post }) do |f|
+          = devise_error_messages!
+          .field
+            = f.label 'Введите логин, для которого хотите сбросить пароль'
+            %br/
+            = f.text_field :username, autofocus: true, class: 'form-control'
+            %p.text-info После сброса пароля, проверьте e-mail, на который был зарегистрирован логин
+
+            %br/
+          .actions
+            .pull-right
+              = f.submit "Сбросить пароль", class: 'btn btn-sm btn-primary'
+            

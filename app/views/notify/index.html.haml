@@ -1,0 +1,29 @@
+-#=javascript_include_tag 'notify'
+.row
+  .col-md-12
+    %h3 Cписок сообщений для оповещения пользователей
+.row
+  .col-md-12
+    = render 'sidebar'
+.row
+  -#= form_tag search_recipient_notify_index_path, method: :post, remote: true do
+  = form_tag notify_index_path, method: :get, remote: true do
+    .col-md-2.col-md-offset-7
+      = select_tag :recipient, options_from_collection_for_select(NotifyMessage::Recipient, :first, :last),class: 'form-control'
+    .col-md-2
+      = select_tag :theme_id, options_from_collection_for_select(Theme.order('name'), :id, :name), include_blank: 'Выберите тему', class: 'form-control'
+    .col-md-1
+      = submit_tag 'Поиск', class: 'btn btn-sm btn-primary'
+
+.row
+  .col-md-12
+    #table
+      = render 'notify_list'
+
+:javascript
+    $('#spinner').hide();
+    console.log('stas');
+    $('#theme_name').autocomplete({
+        minLength: 1,
+        source: "/notify/search_theme"
+    });

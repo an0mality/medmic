@@ -1,0 +1,30 @@
+-if @organizations.present?
+  .alert.alert-info.alert-dismissable
+    %button.close{"aria-hidden" => "true", "data-dismiss" => "alert", :type => "button"} &times;
+    Красным цветом выделены организации, у которых статус "не актуально", а зеленым -"актуально"
+  .row
+    .col-md-12
+      %table.table.table-bordered.table-condensed.table-hover
+        %tr
+          %th
+            №
+          %th
+            Наименование
+          %th
+          %th
+        %tbody
+          - @organizations.each_with_index do |org, index|
+            %tr{class: org.actual ? 'success' : 'danger'}
+              %td
+                =index +1
+              %td
+                =org.name
+              %td
+                %center
+                  = link_to admin_organization_path(org), method: :delete, class: 'btn btn-danger', title: 'Удалить запись', data: {confirm:  'Вы уверены, что хотите удалить запись?'} do
+                    %i.fa.fa-minus
+              %td
+                %center
+                  = link_to edit_admin_organization_path(org), class: 'btn btn-primary', title: 'Редактировать запись' do
+                    %i.fa.fa-cog
+      %center= will_paginate @organizations, previous_label: '<', next_label: '>'

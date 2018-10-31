@@ -1,0 +1,22 @@
+#documentModal.modal{"aria-hidden" => "true", "aria-labelledby" => "myModalLabel", :role => "dialog", :tabindex => "-1"}
+  .panel.panel-primary{style: "width:auto; max-width:700px;height:auto; max-height:700px; display: block; vertical_align: middle; margin: auto; margin-top: 2%;"}
+    .modal-dialog
+      .modal-header        
+        .panel-heading
+          %button.close{"aria-hidden" => "true", "data-dismiss" => "modal", :type => "button"}
+            %span{"aria-hidden" => "true"} ×
+          %h4#myModalLabel Добавление документа
+      .modal-body
+        .panel-body          
+          =form_tag admin_documents_path,  multipart: true, remote: :true, class: "form-horizontal" do
+            %h3 Выбрать файлы
+            =file_field_tag :file, :multiple => true, name: "attachments[]"
+            %br
+            =submit_tag 'Загрузить файлы', class: "btn btn-primary"
+
+      .modal-footer
+        %button.btn{"aria-hidden" => "true", "data-dismiss" => "modal"} Закрыть
+        
+
+
+

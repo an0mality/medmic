@@ -1,0 +1,33 @@
+#aboutModal.modal{"aria-hidden" => "true", "aria-labelledby" => "myModalLabel", :role => "dialog", :tabindex => "-1"}
+  .panel.panel-primary{style: "width:auto; max-width:700px;height:auto; max-height:700px; display: block; vertical_align: middle; margin: auto; margin-top: 2%;"}
+    .modal-dialog
+      .modal-header        
+        .panel-heading
+          %button.close{"aria-hidden" => "true", "data-dismiss" => "modal", :type => "button"} &#xD7;
+          %h3#myModalLabel О программе
+      .modal-body
+        .panel-body          
+          %p Список модулей системы:
+          %h4
+            %p
+            %i.fa.fa-check
+            Регистр детей первого года жизни, получающих полноценное питание;
+            %p
+            %i.fa.fa-check
+            Модуль цервикального скрининга рака шейки матки с тестированием на вирус папилломы человека;
+            %p
+            %i.fa.fa-check
+            Реестр инвалидов и детей-инвалидов по исполнению индивидуальных программ реабилитации или абилитации;
+            %p
+            %i.fa.fa-check
+            Регистр врачей и фельдшеров, имеюших право выписки льготных рецептов;
+            %p
+            %i.fa.fa-check
+            Документы.
+            %br
+            %br
+              %p
+              Разработка ГБУЗ КО "МИАЦ Калужской облaсти"
+      .modal-footer
+        %button.btn{"aria-hidden" => "true", "data-dismiss" => "modal"} Закрыть
+        

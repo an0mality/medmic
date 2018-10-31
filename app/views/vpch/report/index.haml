@@ -1,0 +1,86 @@
+-#  1 - для организации (vpch)
+-#  2 - для спида (spid)
+-#  3 - для онко (onko)
+-#  4 - полный отчет (admin и mz && vpch)
+- if current_user.present?
+  - role = find_role(current_user)
+
+.col-xs-12.col-md-12
+  %strong
+    %i
+      .text-center Отчетность по оценке скрининга РШМ.
+  .well
+    = form_tag(request.path, method: :get) do
+      - unless role == 1
+        = label_tag :organization_id, 'Выберите организацию'
+        = select_tag :organization_id, options_from_collection_for_select(Organization.at_vpch.order(:name), "id", "name", params[:organization_id]), include_blank: 'Все ЛПУ', class: 'form-control'
+      - else
+        = hidden_field_tag :organization_id, current_user.organization_id
+      %br
+      = hidden_field_tag :role, role
+      .row
+        .col-md-6
+          = label_tag :date_beg_report, 'Начало отчетного периода'
+          = text_field_tag :date_beg, params[:date_beg], placeholder: "Нажмите  на поле и выберите нужную дату", class: "begin_at form-control "
+        .col-md-6
+          = label_tag :date_end_report, 'Конец отчетного периода'
+          = text_field_tag :date_end, params[:date_end], placeholder: "Нажмите  на поле и выберите нужную дату", class: "end_at form-control "
+      %br
+      .row
+        .col-md-12
+          .text-center
+            =submit_tag "Сформировать отчет", class: "btn btn-sm btn-primary"
+  %strong
+    %i
+      .text-center Доступные файлы
+      .text-center.small (Для нового отчета, сформируйте файл)
+
+  .well
+    .row
+      .col-md-12
+        - if current_user.admin || current_user.mz && current_user.vpch
+          %center
+            %strong
+              - if File.exist?("#{Rails.root}/public/vpch/Сводный отчет.xls")
+                = link_to 'Скачать сводный отчет', download_svod_vpch_report_index_path, class: "btn btn-sm btn-primary", target: "blank"
+
+              %br
+              %br
+              -Organization.at_vpch.pluck(:id).each do |org|
+                - if File.exist?("#{Rails.root}/public/vpch/#{Organization.find(org).name}.xls")
+                  = link_to "Скачать отчет для #{Organization.find(org).name}", download_for_lpu_vpch_report_index_path( org: org), class: "btn btn-sm btn-primary", id: 'chat', target: "blank"
+                  %br
+                  %br
+        - elsif current_user.vpch
+          - org = current_user.organization_id
+          - if File.exist?("#{Rails.root}/public/vpch/#{Organization.find(org).name}.xls")
+            .text-center
+              = link_to "Скачать отчет для #{Organization.find(org).name}", download_for_lpu_vpch_report_index_path(org: org), class: "btn btn-sm btn-primary", id: 'chat', target: "blank"
+        - elsif current_user.onko
+          - if File.exist?("#{Rails.root}/public/vpch/КОКОД_результаты.xls")
+            .text-center
+              = link_to "Скачать отчет", download_for_onko_vpch_report_index_path, class: "btn btn-sm btn-primary", target: "blank"
+        - elsif current_user.spid
+          - if File.exist?("#{Rails.root}/public/vpch/СПИД_результаты.xls")
+            .text-center
+              = link_to "Скачать отчет", download_for_spid_vpch_report_index_path, class: "btn btn-sm btn-primary", target: "blank"
+
+
+
+:javascript
+    $('.begin_at').datetimepicker({
+        language: 'ru',
+        format: "YYYY-MM-DD"
+    });
+    $('.end_at').datetimepicker({
+        language: 'ru',
+        format: "YYYY-MM-DD"
+    });
+    $('.begin_at').on("dp.change", function (e) {
+        console.log($('.begin_at').data("DateTimePicker"));
+        $('.end_at').data("DateTimePicker").setMinDate(e.date);
+    });
+    $('.end_at').on("dp.change", function (e) {
+        console.log($('.end_at').data("DateTimePicker"));
+        $('.begin_at').data("DateTimePicker").setMaxDate(e.date);
+    });

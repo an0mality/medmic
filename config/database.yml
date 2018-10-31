@@ -1,0 +1,18 @@
+default: &default
+  adapter: postgresql
+  encoding: unicode
+  host: localhost
+  database: mednet
+  port: 5432
+#  pool: <%= ENV.fetch("RAILS_MAX_THREADS") { 5 } %>
+  username: 
+  password: 
+
+development:
+  <<: *default
+
+test:
+  <<: *default
+
+production:
+  <<: *default

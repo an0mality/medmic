@@ -1,0 +1,10 @@
+.row
+  .col-md-12
+    %h3 Страница редактирования сообщения для оповещения пользователей
+.row
+  .col-md-12
+    = render 'sidebar'
+.row
+  .col-md-12
+    = render 'form',act: @notifymessage, url:  notify_path(@notifymessage), met: 'put',
+      namebtn: 'Внести изменения', opt1: { :selected => @notifymessage.recipient_user_id}

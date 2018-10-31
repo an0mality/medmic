@@ -1,0 +1,28 @@
+#helpModal.modal{"aria-hidden" => "true", "aria-labelledby" => "myModalLabel", :role => "dialog", :tabindex => "-1"}
+  .panel.panel-primary{style: "width:auto; max-width:700px;height:auto; max-height:700px; display: block; vertical_align: middle; margin: auto; margin-top: 2%;"}
+    .modal-dialog
+      .modal-header        
+        .panel-heading
+          %button.close{"aria-hidden" => "true", "data-dismiss" => "modal", :type => "button"} &#xD7;
+          %h3#myModalLabel Контакты технической поддержки:
+      .modal-body
+        .panel-body          
+          %p
+          %i.fa.fa-phone.fa-lg
+          (4842) 70-50-04 доб.36
+
+          %p
+          %i.fa.fa-map-marker.fa-lg
+          Калужская область г. Калуга ул. Вишневского д.1 корп. 5
+          
+          %p 
+          %i.fa.fa-envelope-o.fa-lg
+          Ваши вопросы и предложения по улучшению функционала присылайте на #{mail_to "pr@miac.kaluga.ru"}
+
+          %p 
+          %i.fa.fa-info.fa-lg
+          Дополнительную информацию по работе МИАЦ Калужской области вы можете найти на #{link_to "официальном сайте МИАЦ Калужской области", 'http://miac.kaluga.ru/'}
+
+      .modal-footer
+        %button.btn{"aria-hidden" => "true", "data-dismiss" => "modal"} Закрыть
+        

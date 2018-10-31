@@ -1,0 +1,59 @@
+!!!
+%html
+  %head
+    %meta{:content => "text/html; charset=UTF-8", "http-equiv" => "Content-Type"}/
+    =favicon_link_tag 'favicon.ico'
+    %title Mednet
+    = csrf_meta_tags
+    = stylesheet_link_tag 'application', media: 'all'
+
+    = javascript_include_tag 'application', 'data-turbolinks-track' => 'reload'
+    = javascript_include_tag  'bootstrap'
+    = javascript_include_tag  'moment_ru.js'
+    = javascript_include_tag "best_in_place.jquery-ui"
+    =javascript_include_tag 'bootstrap-datetimepicker.min.js'
+
+
+    - unless @notify.nil?
+      .row
+        .col-md-12.col-xs-12.col-lg-12
+          - @notify.each do |notify|
+            .alert.alert-warning.alert-dismissible{:role => "alert"}
+              %button.close{"aria-label" => "Close", "data-dismiss" => "alert", :type => "button"}
+                %span{"aria-hidden" => "true"} ×
+              -#%strong #{t('warning')}
+              #{notify.message.html_safe}
+
+  %body
+
+    = hidden_field_tag :path, params[:controller].to_s+'/'+params[:action].to_s
+
+
+    .spinner
+      =image_tag("loading.gif")
+    .wrapper
+      = render 'shared/top_welcome'
+      #content
+        = flash_messages
+        .row
+          .col-md-12
+
+            = yield
+    #footer
+      .text-center 2016-2018 © Все права защищены.&nbsp  ГБУЗ КО МИАЦ Калужской области
+
+:javascript
+  $(".spinner").hide();
+
+
+  path = $('#path').val();
+
+  $.ajax({
+    url: '/main/monitoring',
+    method: 'POST',
+    dataType: 'script',
+    data: {
+      path: path
+    },
+  });
+

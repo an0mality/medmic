@@ -1,0 +1,39 @@
+.row
+  .col-md-12
+    .document-form
+      = search_form_for @q, url: url do |f|
+        .input-group
+          =f.search_field :filename_cont, class: 'form-control', :placeholder => "Название документа..."
+          %span.input-group-btn
+            %button.btn.btn-default{:type => "submit"} Искать
+- if request.path == admin_document_index_path
+  .row
+    .col-md-12
+      .document-form
+        = form_for Document.new, url: upload_admin_document_index_path, method: :post do |f|
+          .input-group
+            =f.file_field :file, class: 'form-control', :placeholder => "Название документа..."
+            %span.input-group-btn
+              %button.btn.btn-default{:type => "submit"} Загрузить
+%br
+-if @documents.present?
+  .row
+    .col-md-10.col-md-offset-1
+      %table.table.table-bordered.table-hover
+        %thead
+          %tr
+            %th
+              = sort_link(@q, :filename, "Наименование файла")
+              (Нажмите на заголовок для сортировки)
+            %th
+        %tbody
+          -@documents.each do |d|
+            %tr
+              %td=d.filename
+              %td
+                =link_to document_path(d) do
+                  %i.fa.fa-download
+                  Скачать
+
+-else
+  .text-center.text-info Не найдено ни одного документа

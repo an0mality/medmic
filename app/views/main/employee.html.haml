@@ -1,0 +1,58 @@
+-if @employees.present?
+  .panel.panel-info
+    .panel-heading
+      .row
+        .col-md-12
+          .pull-right
+            Мои пользователи
+            = link_to unloading_xls_main_index_path, class: 'btn btn-primary', :target => :blank do
+              %i.fa.fa-angle-double-down
+              Выгрузить список в формате XLS
+    .panel-body
+      .row
+        .col-md-12
+          .pull-right.text-success Изменению подлежат поля, помеченные звездочкой*
+      %br
+      -@employees.each do |e|
+        .row
+          .col-md-12
+            %i.fa.fa-user
+            %span.text-info ФИО:
+            %span=e.fio
+        %p
+        .row
+          .col-md-12
+            %i.fa.fa-university
+            %span.text-info Наименование медицинской организации:
+            %span=e.organization.name
+        %p
+
+        .row
+          .col-md-12
+            %i.fa.fa-bullseye
+            %span.text-info Уровень доступа:
+            %span
+              =e.roles
+              -available_module(e).each do |a|
+                =a
+        %p
+        .row
+          .col-md-12
+            %i.fa.fa-list
+            %span.text-info Логин:
+            %span=e.username
+
+        %p
+        .row
+          .col-md-12
+            %i.fa.fa-envelope
+            %span.text-success Email*:
+            %span=best_in_place e, :email, as: :input, url:update_user_main_path(e)
+        %p
+        .row
+          .col-md-12
+            %i.fa.fa-phone-square
+            %span.text-success Контактный телефон*:
+            %span=best_in_place e, :phone, as: :input, url: update_user_main_path(e.id)
+
+        %hr

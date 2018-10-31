@@ -1,0 +1,45 @@
+=render 'nav_hdbk'
+
+.row
+  .col-xs-12.col-md-12
+    .alert.alert-info.alert-dismissable
+      %button.close{"aria-hidden" => "true", "data-dismiss" => "alert", :type => "button"} &times;
+      %p Для внесения медработника в регистр следует заполнить форму, в которой требуется ПРАВИЛЬНО указать должность медработника.
+      %p Чтобы избежать ошибок рекомендуем сверить должность по справочникам.
+
+.row{style: 'margin-bottom: 5px;'}
+  .col-md-12
+    .form-group
+      -#=form_tag(request.path, method: 'get') do
+      = form_tag search_position_frmr_hdbk_index_path, method: :post, remote: true do
+        .col-md-3
+          .input-group
+            = text_field_tag :code,'', class: 'form-control', placeholder: 'Поиск по коду'
+            .input-group-btn
+              %i.fa.fa-angle-down.btn.btn-default{type: 'button',id: 'pcode_sort', title: 'Сортировать по коду'}
+
+        .col-md-2
+          .input-group
+            = text_field_tag :name,'', class: 'form-control', placeholder: 'Поиск по наименованию'
+            .input-group-btn
+              %i.fa.fa-angle-down.btn.btn-default{type: 'button',id: 'pname_sort', title: 'Сортировать по наименованию'}
+
+        .col-md-2
+          = select_tag :dlo, options_for_select([['Рецепты в рамках ДЛО', 0],['включен как врач', 1], ['включен как фельдшер', 2]]), class: 'form-control'
+
+        .col-md-5
+          = button_tag(type: 'submit', class: 'btn btn-primary',  data: { 'disable-with' => 'Ищем...' }) do
+            %i.fa.fa-search
+            Поиск
+
+
+          =link_to  position_frmr_hdbk_index_path, class: 'btn btn-success' do
+            %i.fa.fa-list
+            Показать всех
+
+
+
+
+#list
+  =render 'list_p'
+

@@ -1,0 +1,11 @@
+.spinner{
+    display: block;
+    left:50%;
+    top: 20%;
+    position: fixed;
+    z-index: 100;
+}
+
+.spinner img{
+    width: 25%;
+}

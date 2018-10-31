@@ -1,0 +1,43 @@
+-if !@users.nil? && @users.present?
+  %h3.text-center Результаты поиска
+  .pull-right.text-info Поля, отмеченные звездочкой, можно редактировать inline
+  %table.table.table-active.table-bordered.table-hover.table-condensed
+    %thead
+      %tr.info
+        %th.text-center{rowspan:2} №п/п
+        %th.text-center{rowspan:2} Email
+        %th.text-center{rowspan:2} Логин
+        %th.text-center{rowspan:2} ФИО*
+        %th.text-center{rowspan:2} МО*
+        %th.text-center{rowspan:2} Дата последнего посещения
+        %th.text-center{rowspan:2} Телефон*
+        %th.text-center{colspan:8} Доступ (если доступ не определен - кнопка пуста)
+      %tr
+        %th.info.text-center Админ
+        %th.info.text-center Детское питание
+        %th.success.text-center МСЭ
+        %th.warning.text-center ВПЧ
+        %th.primary.text-center Аптека
+        %th.danger.text-center Регистр. мед.работников
+        %th.text-center МЗ
+        %th.text-center Модератор МО
+        %th.danger.text-center Блок
+    %tbody
+      -@users.each_with_index do |u, index|
+        %tr
+          %td.text-center=index+1
+          %td=u.email
+          %td=u.username
+          %td=best_in_place u, :fio, as: :input, url: admin_user_path(u)
+          %td=best_in_place u, :organization_id, as: :select, collection: Organization.all.to_a.map{|a| [a.id,a.name]}, url: admin_user_path(u)
+          %td=u.current_sign_in_at.nil? ? 'Не авторизован': (l u.current_sign_in_at+3.hours, format: :long)
+          %td.text-center= best_in_place u, :phone, as: :input, url: admin_user_path(u)
+          %td.text-center= best_in_place u, :admin, as: :checkbox, url: admin_user_path(u),  collection: {false: 'Нет', true: 'Да'}, class: 'btn btn-sm btn-info'
+          %td.text-center= best_in_place u, :feed, as: :checkbox, url: admin_user_path(u),  collection: {false: 'Нет', true: 'Да'}, class: 'btn btn-sm btn-primary'
+          %td.text-center.text-center= best_in_place u, :mse, as: :checkbox, url: admin_user_path(u),  collection: {false: 'Нет', true: 'Да'}, class: 'btn btn-sm btn-success'
+          %td= best_in_place u, :vpch, as: :checkbox, url: admin_user_path(u),  collection: {false: 'Нет', true: 'Да'}, class: 'btn btn-sm btn-warning'
+          %td.text-center= best_in_place u, :rmis, as: :checkbox, url: admin_user_path(u),  collection: {false: 'Нет', true: 'Да'}, class: 'btn btn-sm btn-warning'
+          %td.text-center= best_in_place u, :frmr, as: :checkbox, url: admin_user_path(u),  collection: {false: 'Нет', true: 'Да'}, class: 'btn btn-sm btn-warning'
+          %td.text-center= best_in_place u, :mz, as: :checkbox, url: admin_user_path(u),  collection: {false: 'Нет', true: 'Да'}, class: 'btn btn-sm btn-default'
+          %td.text-center= best_in_place u, :moderator, as: :checkbox, url: admin_user_path(u),  collection: {false: 'Нет', true: 'Да'}, class: 'btn btn-sm btn-default'
+          %td.text-center= best_in_place u, :blocks, as: :checkbox, url: admin_user_path(u),  collection: {false: 'Нет', true: 'Да'}, class: 'btn btn-sm btn-danger'

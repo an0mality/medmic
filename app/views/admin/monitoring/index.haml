@@ -1,0 +1,48 @@
+-#=render 'admin/monitoring/ind'
+=javascript_include_tag 'admin/monitoring'
+
+
+
+.row
+  .pull-right
+    = submit_tag '<<', class: "btn btn-sm btn-primary btn_minus btn_prev"
+    = submit_tag '>>', class: "btn btn-sm btn-primary btn_plus"
+    = submit_tag 'Сегодня', class: "btn btn-sm btn-success btn_now"
+    = submit_tag 'Неделя', class: "btn btn-sm btn-success btn_week"
+    = submit_tag 'Месяц', class: "btn btn-sm btn-success btn_month"
+  %br
+
+  .well.now
+    %canvas#myNow
+    %canvas#myNowTwo
+    %canvas#myNowThree
+  .well.week
+    %canvas#myWeek
+    %canvas#myWeekTwo
+    %canvas#myWeekThree
+  .well.month
+    %canvas#myMonth
+    %canvas#myMonthTwo
+    %canvas#myMonthThree
+.row
+  .n.text-center{style: 'font-size: 18pt ;font-weight: bold;'}
+    #time
+  #table
+
+-#:javascript
+  //now
+  var now_events_x = #{raw @labels_now};
+  var now_events_y = #{raw @values_now};
+  //week
+  var week_events_x = #{raw @labels_week};
+  var week_events_y = #{raw @values_week};
+  //month
+  var month_events_x = #{raw @labels_month};
+  var month_events_y = #{raw @values_month};
+
+:css
+  canvas {
+    height: 100% !important;
+    width: 100% !important;
+  }
+

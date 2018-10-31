@@ -1,0 +1,25 @@
+=javascript_include_tag 'autocomplete-rails.js'
+
+-analysis = Analysis.where(patient_id: params[:lsd_id]).last
+- form_last  = @form_last.last
+- if form_last.cat_vpch_id == nil && form_last.cat_citology_id == nil
+    %h3
+        %i
+            Пациент уже был на приеме: #{I18n.l @last_reception.last.reception_at, format: :short}
+        %p
+    %h5
+        Идентификатор пациента: #{@last_reception.last.analys_key}
+    = link_to "Печать направления",print_vpch_analysis_path(analysis.id, lsd_id: params[:lsd_id], href: params[:controller]), class: "btn btn-sm btn-primary"
+    = link_to "Печать направления на Цитология",print_vpch_analysis_path(analysis.id, lsd_id: params[:lsd_id], href: params[:controller], to: 'onko'), class: "btn btn-sm btn-success"
+
+- elsif form_last.cat_vpch_id.present? || form_last.cat_citology_id.present?
+    %h3
+        %i
+            Пациент уже был на приеме:
+        %strong
+            #{I18n.l @last_reception.last.reception_at, format: :short}
+    %h5
+        Идентификатор пациента: #{@last_reception.last.analys_key}
+    = link_to "Печать направления",print_vpch_analysis_path(analysis.id, lsd_id: params[:lsd_id], href: params[:controller]), class: "btn btn-sm btn-primary"
+    = link_to "Печать направления на Цитология",print_vpch_analysis_path(analysis.id, lsd_id: params[:lsd_id], href: params[:controller], to: 'onko'), class: "btn btn-sm btn-success"
+

@@ -1,0 +1,36 @@
+-#= paginate @notifymessages
+-#= page_entries_info @notifymessages
+
+
+
+%table.table.table-bordered
+  %tr.info
+    %th Тема
+    %th Сообщение
+    %th Период
+    %th Автор
+    %th Получатель
+    %th Действия
+  - @notifymessages.each do |message|
+    %tr{id: "data_#{message.id}", class: message.end_at >= Time.now ? 'success' : ''}
+      %td
+        = message.theme.present? ? message.theme.name : 'Тема не найдена'
+      %td
+        =sanitize(message.message, :tags=>[]).truncate(150, :separator => ' ').html_safe
+      %td
+        с #{I18n.l (message.begin_at+3.hour), format: :my } по #{I18n.l (message.end_at+3.hour), format: :my}
+      %td
+        = message.user.present? ? message.user.fio : 'Пользователь не найден'
+      %td
+        =message.to_notify
+      %td
+        -#%span.delete Удалить
+        = link_to notify_path(message), method: :delete, data: { :confirm => 'Вы уверены, что хотите удалить сообщение?' }, remote: true do
+          %i.fa.fa.fa-trash-o
+        = link_to 'Редактировать', edit_notify_path(message)
+
+= will_paginate @notifymessages, previous_label: '<', next_label: '>'
+
+:javascript
+  $('.spinner').hide();
+

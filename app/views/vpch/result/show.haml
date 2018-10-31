@@ -1,0 +1,89 @@
+=javascript_include_tag 'vpch/result'
+-#- require "#{Rails.root}/app/modules/lsd.rb"
+.col-xs-12.col-md-12
+  = render '/vpch/shared/nav_result'
+  %br
+  -if current_user.spid
+    = form_tag add_spid_key_vpch_result_index_path, method: 'post' do
+      = hidden_field_tag :registry_id,  params[:id]
+      = hidden_field_tag :user_id,  current_user.id
+      %table.table
+        %tr
+          %td{colspan: 2}
+            .col-md-6
+              = text_field_tag :key_spid, params[:key_spid], :placeholder => "Ключ для первого пациента регистра", :type => "text", class: 'form-control'
+            .col-md-6
+              = text_field_tag :recep_at, params[:recep_at], :placeholder => "Дата приема материала", class: 'form-control'
+
+            = hidden_field_tag :id, params[:id]
+            %br
+        %tr
+          %td.text-center{colspan: 2}
+            .set_key
+              = submit_tag 'Присвоить ключ и установить результат NotDetected', class: 'btn btn-sm btn-default'
+              = submit_tag 'Присвоить ключ', class: 'btn btn-sm btn-default'
+            = submit_tag 'Установить результат NotDetected без присвоения ключа', class: 'btn btn-sm btn-default'
+        %tr
+          %td.text-center{colspan: 2}
+            = submit_tag 'Очистить ключи и результаты', class: 'btn btn-sm btn-warning'
+            = submit_tag 'Очистить ключи', class: 'btn btn-sm btn-warning'
+            = submit_tag 'Очистить результаты анализов',  class: 'btn btn-sm btn-warning'
+            .pull-right
+              =link_to '< К списку реестров', :back, class: 'btn btn-sm btn-success'
+        %tr
+          %td
+            = check_box_tag :confirm_25
+            %confirm_25
+              %span.text-info Отметить результаты всех пациентов реестра как одобренные
+            %unsel_confirm_25
+              %span.text-danger Отменить все одобренные результаты
+            %strong.text-info
+              %strong
+                #show_confirm
+          %td
+            = check_box_tag :print_25
+            %print_25
+              %span.text-info Отметить всех пациентов реестра для печати
+            %unsel_print_25
+              %span.text-warning Снять выделение для печати
+
+            %strong.text-info
+              %strong
+                #show_print
+            %unsel_print_25_btn
+              =link_to 'Сформировать xls файл', '#', class: 'btn btn-sm btn-default'
+            %br
+            - if File.exist?("#{Rails.root}/public/vpch/spid/print.xls")
+              %strong Форма для печати:
+              %span
+                = link_to 'Скачать',  download_spid_result_vpch_result_index_path, method: :post, class: "btn btn-sm btn-primary"
+        %tr.spid_confirm_date
+          %td{colspan:2}
+            .row
+              .col-md-5
+                Дата закрытия реестра:
+              .col-md-5
+                = best_in_place @registry, :spid_confirm_date, as: :input, url: vpch_result_path(@registry), class: 'form-control piker'
+
+        %tr
+          %td{colspan: 2}
+            %center
+              .progress.progress-striped.active
+                .progress-bar{:style => "width: 100%;"}
+                  %span Пожалуйста подождите. Файл формируется...
+  - if current_user.onko
+    .row
+      .col-md-12
+        = form_tag add_norma_onko_vpch_result_index_path, method: 'post' do
+          = hidden_field_tag :id, params[:id]
+          .input-group
+            .btn-group
+              %br
+              = submit_tag "Установить всем пациентам реестра значения анализа 'Норма'", class: 'btn btn-primary'
+              %n
+              = submit_tag 'Очистить результаты анализов', class: 'btn btn-danger'
+
+
+
+
+  = render 'vpch/shared/table_patiens_registry'

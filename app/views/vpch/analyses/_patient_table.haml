@@ -1,0 +1,66 @@
+.col-xs-12.col-md-12
+  %span.text-info{style: 'font: italic, size:8pt;'} *Введите первые буквы фамилии, имени, отчества и год рождения без пробелов. Например, 'иам21031988','иам21.03.1988', 'иам', 'иа', 'и', 'иа21', 'иа2103'
+  - if @vpch_patients.present?
+    %table.table.table-bordered
+      %tr{rowspan: 2}
+        %th{rowspan: 2}
+          %center.text_table
+            Ф.И.О
+        %th{rowspan: 2}
+          %center.text_table
+            Дата рождения
+        %th{rowspan: 2}
+          %center.text_table
+            Возраст
+        %th{colspan:3}
+          %center.text_table
+            Документы удостоверяющие личность
+        %th{rowspan: 2}
+          %center.text_table
+            Операции
+      %tr
+        %th
+          %center
+            Паспорт
+        %th
+          %center
+            ОМС
+        %th
+          %center
+            СНИЛС
+      - @vpch_patients.each do |patient|
+        %tr
+          %td
+            %center
+              = patient.full_name
+          %td
+            %center
+              = patient.birth_dt
+          %td
+            %center
+              = patient.full_age
+          %td
+            - if patient.passport_doc.present?
+              - patient.passport_doc.each do |passport|
+                #{passport[:name]}, #{passport[:series]}, #{passport[:number]}
+            - else
+              = 'Не хватает данных'
+          %td
+            - if patient.polis_doc.present?
+              - patient.polis_doc.each do |polis|
+                #{polis[:name]},#{polis[:series]}, #{polis[:number]}, #{polis[:org]}
+            - else
+              = 'Не хватает данных'
+          %td
+            - if patient.snils_doc.present?
+              = patient.snils_doc
+            - else
+              = 'Не хватает данных'
+          %td
+            = link_to info_vpch_analyses_path(lsd_id: patient.id), class: 'btn btn-sm btn-warning' do
+              %i.fa.fa-folder-open
+              Создать лист осмотра
+  -elsif !@vpch_patients.present? && params[:index].present?
+    %h3.text-center Не найдено ни одного пациента
+
+

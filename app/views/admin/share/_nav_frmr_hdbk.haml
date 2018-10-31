@@ -1,0 +1,13 @@
+%ul.nav.nav-tabs
+  %li{class: request.path == admin_frmr_hdbk_speciality_index_path ? "active" : ""}
+    = link_to admin_frmr_hdbk_speciality_index_path do
+      %i.fa.fa-stethoscope
+      Специальности
+  %li{class: request.path == admin_frmr_hdbk_position_index_path ? "active" : ""}
+    = link_to admin_frmr_hdbk_position_index_path do
+      %i.fa.fa-user-md
+      Должности
+  %li{class: request.path == admin_frmr_hdbk_organization_index_path ? "active" : ""}
+    = link_to admin_frmr_hdbk_organization_index_path do
+      %i.fa.fa-hospital-o
+      Медицинские организации

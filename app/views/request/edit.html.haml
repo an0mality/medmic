@@ -1,0 +1,17 @@
+.row
+  .col-md-3
+  .col-md-8
+    %h3 Форма редактирования заявки
+  - unless current_user.admin
+    .row
+      .col-md-3
+        = render 'sidebar'
+      .col-md-9
+        = render 'form', act: @request, url: request_path(@request), met: 'put',
+          namebtn: 'Изменить данные'
+  - else
+    .row
+      .col-md-3
+      .col-md-9
+        = render 'form', act: @request, url: request_path(@request), met: 'put',
+            namebtn: 'Изменить данные'

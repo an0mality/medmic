@@ -1,0 +1,157 @@
+#rotate {
+    /*Safari*/
+    -webkit-transform: rotate(90deg);
+    /*Firefox*/
+    -moz-transform: rotate(90deg);
+    /*IE*/
+    -ms-transform: rotate(90deg);
+    /*Opera*/
+    -o-transform: rotate(90deg);
+    /*Internet Explorer*/
+    filter: progid:DXImageTransform.Microsoft.BasicImage(rotation=3);
+    transform: rotate(90deg);
+    font-size: 11px;
+    /*border: 4px double black;*/
+    width: 125mm;
+    /*margin-left: 60mm;*/
+    height: 185mm;
+    margin-top: -25mm;
+    /*font-size: 11px;*/
+    /*border: 4px solid black;*/
+    /*width: 125mm;*/
+    margin-left: 45mm;
+    /*height: 185mm;*/
+    /*padding-top: -55mm;*/
+}
+#rotate_reverse_cito {
+    /*Safari*/
+    -webkit-transform: rotate(-90deg);
+    /*Firefox*/
+    -moz-transform: rotate(-90deg);
+    /*IE*/
+    -ms-transform: rotate(-90deg);
+    /*Opera*/
+    -o-transform: rotate(-90deg);
+    /*Internet Explorer*/
+    filter: progid:DXImageTransform.Microsoft.BasicImage(rotation=3);
+    transform: rotate(-90deg);
+    font-size: 11px;
+    /*border: 4px double black;*/
+    width: 125mm;
+    /*margin-left: 60mm;*/
+    height: 185mm;
+    margin-top: 125mm;
+    /*font-size: 11px;*/
+    /*border: 4px solid black;*/
+    /*width: 125mm;*/
+    margin-left: 45mm;
+    /*height: 185mm;*/
+    /*padding-top: -55mm;*/
+    line-height: 1;
+}
+#rotateCito {
+    /* Safari */
+    -webkit-transform: rotate(90deg);
+    /* Firefox */
+    -moz-transform: rotate(90deg);
+    /* IE */
+    -ms-transform: rotate(90deg);
+    /* Opera */
+    -o-transform: rotate(90deg);
+    /* Internet Explorer */
+    filter: progid:DXImageTransform.Microsoft.BasicImage(rotation=3);
+    transform: rotate(90deg);
+    margin-top: -35mm;
+    font-size: 12px;
+    /*border: 4px double black;*/
+    width: 125mm;
+    margin-left: 45mm;
+    margin-right: -20mm;
+    height: 185mm;
+    /*padding: 2mm;*/
+}
+
+#cut_analysis{
+    border-bottom: 1px dotted black; margin-right: -20mm;
+    -ms-transform: rotate(-45deg);
+    -webkit-transform: rotate(-45deg);
+    transform: rotate(-45deg);
+
+    width: 30mm;
+    height: 16mm;
+    font-size: 11px;
+    margin-left: 1mm;
+}
+
+#rotateCito_a4 {
+     /* Safari */
+     -webkit-transform: rotate(90deg);
+     /* Firefox */
+     -moz-transform: rotate(90deg);
+     /* IE */
+     -ms-transform: rotate(90deg);
+     /* Opera */
+     -o-transform: rotate(90deg);
+     /* Internet Explorer */
+     filter: progid:DXImageTransform.Microsoft.BasicImage(rotation=3);
+     transform: rotate(90deg);
+     margin-top: -30mm;
+     font-size: 12px;
+     /*border: 4px double black;*/
+     width: 150mm;
+     margin-left: 45mm;
+     margin-right: -10mm;
+     height: 200mm;
+     padding: 2mm;
+ }
+#rotate_a4 {
+    /*Safari*/
+    -webkit-transform: rotate(90deg);
+    /*Firefox*/
+    -moz-transform: rotate(90deg);
+    /*IE*/
+    -ms-transform: rotate(90deg);
+    /*Opera*/
+    -o-transform: rotate(90deg);
+    /*Internet Explorer*/
+    filter: progid:DXImageTransform.Microsoft.BasicImage(rotation=3);
+    transform: rotate(90deg);
+    font-size: 11px;
+    /*border: 4px double black;*/
+    width: 150mm;
+    /*margin-left: 60mm;*/
+    height: 200mm;
+    margin-top: -25mm;
+    /*font-size: 11px;*/
+    /*border: 4px solid black;*/
+    /*width: 125mm;*/
+    margin-left: 45mm;
+    /*height: 185mm;*/
+    /*padding-top: -55mm;*/
+}
+#cut_analysis_a4{
+    border-bottom: 1px dotted black;
+    -ms-transform: rotate(-45deg);
+    -webkit-transform: rotate(-45deg);
+    transform: rotate(-45deg);
+
+    width: 20mm;
+    height: 16mm;
+    font-size: 11px;
+    margin-left: 1mm;
+    margin-right: -20mm;
+}
+
+
+
+/*#cut_analysis{*/
+    /*border-bottom: 1px dotted black; margin-right: -20mm;*/
+    /*-ms-transform: rotate(-45deg);*/
+    /*-webkit-transform: rotate(-45deg);*/
+    /*transform: rotate(-45deg);*/
+
+    /*width: 25mm;*/
+    /*height: 18mm;*/
+    /*font-size: 11px;*/
+    /*margin-left:10mm;*/
+/*}*/

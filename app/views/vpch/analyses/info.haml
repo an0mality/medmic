@@ -1,0 +1,70 @@
+.col-xs-12.col-md-12
+  = render 'vpch/shared/nav'
+  %br
+  .panel.panel-info
+    .panel-heading
+      .row
+        .col-md-5
+          - if @lsd_patient.gender_id == 1
+            %i.fa.fa-male
+          - else
+            %i.fa.fa-female
+          %strong
+            =@lsd_patient.full_name
+    .panel-body
+      %table.table.table-bordered
+        %tr
+          %td
+            %i.fa.fa-calendar
+            Дата рождения (возраст)
+          %td
+            = I18n.l @lsd_patient.birth_dt, format: :long
+            (#{@lsd_patient.full_age})
+        %tr
+          %td
+            %i.fa.fa-check-square
+            СНИЛС
+          %td
+            - if @lsd_patient.snils_doc.present?
+              = @lsd_patient.snils_doc
+            - else
+              %h3{style: 'color: red;'}
+                = 'Не хватает данных о СНИЛСe. Необходимо внести информацию о документе в РМИС'
+        %tr
+          %td
+            %i.fa.fa-check-square
+            ЕНП и страховая компания
+          %td
+            - if @lsd_patient.polis_doc.present?
+              - @lsd_patient.polis_doc.each do |polis|
+                #{polis[:name]}, #{polis[:series]}, #{polis[:number]}, #{polis[:org]}
+            - else
+              %h3{style: 'color: red;'}
+                = 'Не хватает данных по ОМС. Необходимо внести информацию о номере полиса ОМС в РМИС'
+        %tr
+          %td
+            %i.fa.fa-bars
+            Паспортные данные
+          %td
+            - if @lsd_patient.passport_doc.present?
+              - @lsd_patient.passport_doc.each do |passport|
+                #{passport[:series]}, #{passport[:number]}, #{passport[:name]}
+            - else
+              %h3{style: 'color: red;'}
+                = 'Не хватает паспортных данных. Необходимо внести информацию о документе в РМИС'
+        %tr
+          %td
+            %i.fa.fa-bars
+            Адрес
+          %td
+            - if @lsd_patient.address.present?
+              = @lsd_patient.address
+            - else
+              %h3{style: 'color: red;'}
+                = 'Не хватает данных адреса пациента'
+
+
+
+
+
+

@@ -1,0 +1,17 @@
+= render 'admin/share/head'
+.row
+  .col-md-12
+    .panel.panel-default
+      .panel-heading
+        Наборы
+      .panel-body
+        = form_for @set, url:admin_food_index_path, method: :post, remote: true do |f|
+          .form-group
+            .input-group
+              = f.text_field :name, placeholder: 'Добавить набор', class:'form-control'
+              = f.hidden_field :old, value: false
+              %span.input-group-btn
+                = f.submit 'Добавить', class: 'btn btn-success'
+- if @sets.present?
+  #table=render 'set_list'
+

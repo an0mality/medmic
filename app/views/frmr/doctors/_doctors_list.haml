@@ -1,0 +1,55 @@
+-#%div{:style => "max-width:1800px; max-height:500px; overflow:auto;"}
+-if @doctors.present?
+  %table.table-striped.table-bordered.table-condensed.table-hover{:width => "100%"}
+    %thead{:style => "background-color: #428bca; color: white;"}
+      %tr.info
+        %th{rowspan: 2} Код
+        %th{rowspan: 2} СНИЛС
+        %th{rowspan: 2} Фамилия
+        %th{rowspan: 2} Имя
+        %th{rowspan: 2} Отчество
+        %th{rowspan: 2} Дата рождения
+        %th{colspan: 3} ДЛО
+        %th{colspan: 2} Должность
+        %th{colspan: 2} Дата
+        %th{colspan: 3} Cертификат
+        %th{rowspan: 2} Кв. кат.
+        %th{rowspan: 2} Совм.
+        %th{rowspan: 2} Тип изм.
+        %th{rowspan: 2} Дата изм.
+      %tr
+        %th Признак
+        %th Дата включения
+        %th Дата исключения
+        %th Код
+        %th Наименование
+        %th приема
+        %th увольнения
+        %th дата выдачи
+        %th код специальности
+        %th наименование специальности
+
+    %tbody
+      -@doctors.each do |doc|
+        %tr
+          %td{title: 'Код'}=doc.code
+          %td{title: 'СНИЛС'}= doc.snils_format
+          %td{title: 'Фамилия'}=doc.surname
+          %td{title: 'Имя'}=doc.name
+          %td{title: 'Отчество'}=doc.patr_name
+          %td{title: 'Дата рождения'}=doc.birth_date
+          %td{title: 'Признак ДЛО'}= doc.dlo ? "1" : "0"
+          %td{title: 'Дата включения ДЛО'}=doc.dlo_reg_date
+          %td{title: 'Дата исключения ДЛО'}=doc.dlo_unreg_date
+          %td{title: 'Код должности'}=doc.position_code
+          %td{title: 'Наименование должности'}=doc.position_name
+          %td{title: 'Дата приема'}=doc.employment
+          %td{title: 'Дата увольнения'}=doc.dismissal
+          %td{title: 'Дата выдачи сертификата'}=doc.cert
+          %td{title: 'Код специальности'}=doc.speciality_code
+          %td{title: 'Наименование специальности'}=doc.speciality_name
+          %td{title: 'Категория'}=doc.quality_name
+          %td{title: 'Совместительство'}=doc.sovmest
+          %td{title: 'Тип изменения'}=doc.change_type
+          %td{title: 'Дата изменения'}=doc.updated_date
+  .text-center=will_paginate @doctors, :params => {:controller => 'doctors', :action => 'index', code: params[:code], surname: params[:surname]}, previous_label: '<На предыдущую страницу', next_label: '> На следующую страницу'

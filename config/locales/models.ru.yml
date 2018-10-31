@@ -1,0 +1,60 @@
+ru:
+  required: 'Обязательное поле'
+  activerecord:
+    models:
+      user: 'Пользователь'
+      doctor: 'Врач-педиатр'
+      sector: 'Участок'
+      notify_message: 'Уведомление'
+      mse_patient: 'ИПРА'
+      recipe: 'выписке рецептов'
+      organization: 'Организация'
+
+    attributes: 
+      user:
+        encrypted_password: 'Зашифрованный пароль'
+        confirmation_token: 'Поле подтверждения адреса электронной почты'              
+        fio: 'ФИО'
+        email: 'Электронная почта'
+        username: 'Логин'
+        password: 'Пароль (минимум 6 символов)'
+        password_confirmation: 'Повторите пароль'
+        organization_id: 'Наименование МО'
+        phone: 'Телефон'
+        vpch: 'ВПЧ-скрининг'
+        consent_to_the_processing_of_personal_data: 'Я согласен на передачу данных в соответствии с политикой в отношении обработки персональных данных'
+        feed : 'Детское питание'
+        mse :  'ИПРА инвалидов'
+
+      organization:
+        name: 'Наименование'
+        full_name: 'Полное наименование'
+        address: 'Адрес организации'
+        tel_secretary: 'Телефон секретаря'
+        web_site: 'Адрес WEB-сайта'
+        type_org_id: 'Тип организации'
+        city_id: 'Территориальная принадлежность'
+        rhb_exc_id: 'Привязка к МСЭ'
+        frmr_organization_id: 'Привязка к ФРМР'
+        at_vpch: 'Принадлежность к ВПЧ'
+        actual: 'Актуальность организации'
+
+      doctor:
+        id: 'Врач-педиатр'
+      sector:
+        name: 'Участок'
+      nurse:
+        name: '7777'
+      notify_message:
+        message: 'Сообщение'
+
+      prg_rhb:
+        typeid: 'Тип мероприятия'
+        evntid: 'Подтип мероприятия'
+        resid: 'Результат выполнения мероприятия'
+        dt_exc: 'Дата выполнения мероприятия'
+        result: 'Если нужно, добавьте комментарии'
+
+
+
+

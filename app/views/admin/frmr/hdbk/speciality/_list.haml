@@ -1,0 +1,58 @@
+=hidden_field_tag :parCode,  params[:code]
+=hidden_field_tag :parName, params[:name]
+=hidden_field_tag :parType, params[:type]
+
+
+.row
+  .col-md-12
+    -if @list.present?
+      %table.table.table-striped.table-condensed.table-hover.table-bordered.table-responsive
+        %caption
+          .row
+            .col-md-8
+              %h4 Количество найденых специальностей: #{@list.count}
+            .col-md-4
+              .pull-right
+                = link_to  download_admin_frmr_hdbk_speciality_index_path(code: params[:code], name: params[:name], type: params[:type], sort_by_name: params[:sort_by_name], sort_by_code: params[:sort_by_code] ),  class: 'btn btn-warning', target: :blank do
+                  %i.fa.fa-download
+                  Скачать список
+        %thead
+          %tr.info
+            %th Код
+            %th Наименование
+            %th Высшее образование
+            %th Среднее образование
+            %th Удаление
+        %tbody
+          -@list.each do |l|
+            %tr{'data-id'=> l.id}
+              %td=best_in_place l, :code, as: :input, url: admin_frmr_hdbk_speciality_path(l)
+              %td=best_in_place l, :name, as: :textarea, url: admin_frmr_hdbk_speciality_path(l)
+              %td=best_in_place l, :high, as: :checkbox, url: admin_frmr_hdbk_speciality_path(l),  collection: {false: 'Нет', true: 'Да'}, class: 'btn btn-sm btn-info'
+              %td=best_in_place l, :sec, as: :checkbox, url: admin_frmr_hdbk_speciality_path(l),  collection: {false: 'Нет', true: 'Да'}, class: 'btn btn-sm btn-info'
+              %td
+                =link_to  admin_frmr_hdbk_speciality_path(l), method: :delete, remote: true, class: 'btn btn-danger', title: 'Удалить запись', data: {confirm:  'Точно удалить?'} do
+                  -#%i.fa.fa-minus
+                  Удалить
+      %center= will_paginate @list, :params => {:controller => 'hdbk/speciality', :action => 'index', name: params[:name], code: params[:code], sort_by_code: params[:sort_by_code], sort_by_name: params[:sort_by_name], type: params[:type]}, previous_label: '<На предыдущую страницу', next_label: '> На следующую страницу'
+
+.row
+  .col-md-12
+    Добавление новой записи
+    #newRecord
+      =form_tag controller: 'admin/frmr/hdbk/speciality', action: :create, method: :post, remote: true, autocomplete: :off do
+        %table.table.table-striped.table-condensed.table-hover.table-bordered.table-responsive
+          %thead
+            %tr
+              %th Код
+              %th Наименование
+              %th Высшее образование
+              %th Среднее образование
+              %th Добавление
+          %tbody
+            %tr
+              %td=text_field_tag :new_code, '', placeholder: 'Код', class: 'form-control'
+              %td=text_field_tag :new_name, '', placeholder: 'наименование', class: 'form-control'
+              %td=check_box_tag  :high, '1', checked = false, class: 'form-control'
+              %td=check_box_tag  :sec, '1', checked = false, class: 'form-control'
+              %td=submit_tag 'Добавить', class: 'btn btn-success', title: 'Добавить запись', data: { 'disable-with' => 'Добавляем. Перестраиваем список...' }

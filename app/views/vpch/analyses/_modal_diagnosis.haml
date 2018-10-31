@@ -1,0 +1,81 @@
+=javascript_include_tag 'autocomplete-rails.js'
+#modal_diagnosis.modal.fade{"aria-hidden" => "true", "aria-labelledby" => "myModalLabel", :role => "dialog", :tabindex => "-1"}
+  .modal-dialog{style: "margin-top: 100px; width:700px; z-index: 9999999999;"}
+    = form_tag(create_diagnosis_vpch_analyses_path, :method => 'get') do
+      .modal-content
+        .modal-header
+          %button.close{"aria-label" => "Close", "data-dismiss" => "modal", :type => "button"}
+            %span{"aria-hidden" => "true"} ×
+          %h4#modal_diagnoses.modal-title
+            %strong
+            %h4
+              Пациент:
+              = @lsd_patient.full_name
+              ,
+              = @lsd_patient.full_age
+              года.
+        .modal-body
+          %strong
+          %h5
+            Результаты анализов:
+          %table.table.active
+            %tr.info
+              %th ВПЧ
+              %th Цитология
+            %tbody
+            %tr
+              %td{style:"width: 50%;"}
+                = @cat_vpch.name
+              %td{style:"width: 50%;"}
+                = @cat_citology.name
+          %br#basicModal
+          %table.table.active
+            %tr.info
+              %th
+                %center
+                  Постановка диагноза
+            %t.body
+            %tr
+              %td
+                %strong
+                %h5
+                  Код по МКБ:
+                = autocomplete_field_tag 'mkb', '', autocomplete_mkb_handbook_code_vpch_analyses_path, :id_element => '#mkb_id', name: "mkb", id: "mkb",  placeholder: "Введите код по МКБ"
+                = hidden_field_tag :mkb_id, params[:id_element], name: "mkb_id", id: "mkb_id"
+                %br
+                %br
+                %strong
+                %h5
+                  Диагноз:
+                = text_area_tag :diagnostics, params[:diagnostics], class: 'redactor', :rows => 15, :cols => 100, placeholder: "Введите описание диагноза"
+                %br
+
+                %table.table.inline{name: 'time_table', id: 'time_table'}
+                  %tr
+                    %td
+                      %strong
+                      %h5
+                        Время следующего приема:
+                    %td
+                      #time_algorithm_box
+                        = text_field_tag :next_visit_algorithm, (I18n.l Time.now, format: :short), name: "next_visit_algorithm", id: "next_visit_algorithm", readonly: 'readonly'
+                    %td
+                      %input#time_algorithm{:unchecked => "unchecked", :name => "time_algorithm", :type => "checkbox"}/
+                      %label{:for => "time_algorithm"} Указать другое время
+                    %td
+                      .e3Div
+                        #another_time_box{ style: 'display: none;' }
+                          = text_field_tag :next_visit, params[:next_visit], placeholder: "Нажмите для выбора даты"
+
+                %strong
+                  %h5
+                    Если случай закончен, отметьте поле
+                    = check_box_tag :closed, params[:closed]
+                    = hidden_field_tag :user_id, current_user.id
+                    = hidden_field_tag :analyses_id, @last_reception.last.id
+
+
+          %center
+        .modal-footer
+          = link_to "Закрыть", "#", class: "btn btn-default", "data-dismiss" => "modal", :type => "button", name: "close_button", id: "close_button"
+          = submit_tag "Сохранить", class: 'btn btn-primary', name: 'save_button', id: 'save_button'

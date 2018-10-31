@@ -1,0 +1,24 @@
+.row{style: 'margin: 5%; margin-top: 10%; '}
+  .col-md-6.col-md-offset-3
+    .panel.panel-info
+      .panel-heading
+        %h2 Форма для смены пароля
+      .panel-body
+        = form_for(resource, as: resource_name, url: password_path(resource_name), html: { method: :put }) do |f|
+          = devise_error_messages!
+          = f.hidden_field :reset_password_token
+          .field
+            = f.label :password, "Новый пароль (минимум 6 символов)"
+            %br/
+            - if @minimum_password_length
+              %em
+                (#{@minimum_password_length} characters minimum)
+              %br/
+            = f.password_field :password, autofocus: true, autocomplete: "off", class: 'form-control'
+          .field
+            = f.label :password_confirmation, "Повторите ваш новый пароль"
+            %br/
+            = f.password_field :password_confirmation, autocomplete: "off", class: 'form-control'
+          .actions
+            %br
+            = f.submit "Сменить пароль", class: 'btn btn-sm btn-default'

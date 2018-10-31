@@ -1,0 +1,35 @@
+
+-if params[:to] == 'onko'
+  = render 'vpch/shared/cito_horizont_a4'
+  = render 'vpch/shared/reverse_side_cito_blank_a4'
+-else
+
+  = render 'vpch/shared/cito_horizont'
+  = render 'vpch/shared/vpch_horizont'
+  = render 'vpch/shared/reverse_side_cito_blank'
+
+= hidden_field_tag :lsd_id, @lsd_patient.id
+= hidden_field_tag :name_controller, params[:href]
+
+
+
+
+:css
+  @media print {
+    @page { margin: 1mm; padding: 1mm; }
+    body { margin: 1cm; }
+    .header-left-top, .a-right-bottom, .time-right-bottom {display: none;}
+    #footer{display: none}
+
+  }
+
+:javascript
+  $(".spinner").hide();
+  window.print();
+
+  if ($('#name_controller').val() == 'vpch/analyses'){
+    window.location.href = '/vpch/analyses/new?lsd_id='+$('#lsd_id').val()
+  }
+  else {
+    window.location.href = '/vpch/registries/'
+  }

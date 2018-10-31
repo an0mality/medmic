@@ -1,0 +1,73 @@
+=javascript_include_tag 'vpch/registries'
+- if @patients.present?
+
+  .alert.alert-success.alert-dismissable
+    %button.close{"aria-hidden" => "true", "data-dismiss" => "alert", :type => "button"} &times;
+    %i.fa.fa-info-circle
+      Внимание, добавлен функционал. Если необходимо, то вы можете добавить пациента из списка в ранее созданный реестр. Для этого выберите из выпадающего списка номер реестра для пациента в колонке, выделенной зеленым цветом, и  нажмите кнопку +
+
+  = form_tag(request.path, :method => 'get', :class => "well form-inline") do
+    = hidden_field_tag :type_org_id, Organization.find(current_user.organization_id).type_org_id
+    %table.table
+      %tr
+        %th
+          Дата начала периода
+        %td
+          = text_field_tag :date_begin, params[:date_begin], placeholder: "#{I18n.l @patients.first.reception_at, format: :long}", class: "form-control input-sm", disabled: true
+      %tr
+        %th
+          Дата окончания периода
+        %td
+          = text_field_tag :date_end, params[:date_end], placeholder: "#{I18n.l @patients.last.reception_at, format: :long}", class: "form-control input-sm", disabled: true
+      %tr
+        %td{colspan:2}
+          .pull-right
+            = link_to 'Создать новый реестр', '#', id: 'create_reestr_btn', class: "btn btn-primary"
+
+    -#= simple_form_for(Registry.new, url: vpch_registries_path,method: :post) do
+    = form_tag(vpch_registries_path, method: :post) do
+      = check_box_tag :select_25
+      %sel_25
+        Выбрать первых 25 человек для включения в реестр
+      %unsel_25
+        Снять выделение
+      %strong.text-danger
+        #show
+      #sel_for_reestr
+        .pre-scrollable
+          %table.table.table-bordered
+            %tr
+              %th.text-center №
+              %th
+              %th
+                Специальный ключ
+              %th
+                Ф.И.О
+              %th
+                Заблокировать анализ пациента
+              %th.success
+                Добавить в существующий реестр
+            - @patients.each_with_index do |patient, index|
+              - patient_name = LsdPatient.patient_info(patient.patient_id).present? ? LsdPatient.patient_info(patient.patient_id).full_name : ' Пациент не найден'
+              %tr{data_id: patient.id, name: patient_name}
+                %td.text-center #{index+1}
+                %td.text-center
+                  = check_box_tag 'reestr'
+                %td
+                  = patient.analys_key
+                %td
+                  = patient_name
+                %td
+                  .block_patient
+                    = link_to block_patient_vpch_analysis_path(patient), method: :post, class: 'btn btn-sm btn-danger', title:'Нажмите, чтобы удалить пациента из базы данных' do
+                      %i.fa.fa-trash-o
+                %td.success
+                  = select_tag :registry_id, options_from_collection_for_select(Registry.list(current_user), 'registry_key', 'registry_key'), prompt: 'Выберите реестр',class: 'form-control exist_registry'
+                  = link_to '#', class: 'btn btn-sm btn-primary add_to_exist_reg', title: 'Добавить пациента в существующий реестр' do
+                    %i.fa.fa-plus
+
+- else
+  .text-center Нет ни одного пациента вне реестра
+
+
+

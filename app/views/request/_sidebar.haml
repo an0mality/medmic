@@ -1,0 +1,5 @@
+%ul.nav.nav-pills.nav-stacked
+  %li{class: ((request.path == new_request_path || @request.present?)&&params[:id].blank?) ? "active" : " "}
+    = link_to 'Новая заявка', new_request_path
+  %li{class: (request.path == request_index_path && @request.blank? || params[:id].present? || request.path == closed_request_index_path ) ? "active" : " "}
+    = link_to 'Мои заявки', request_index_path

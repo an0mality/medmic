@@ -1,0 +1,43 @@
+= will_paginate @requests, previous_label: '<', next_label: '>'
+-#.tet{style: 'color:black'}
+-#  12123
+- unless @requests.present?
+  %h3.text-center Ни одной данной заявки нет
+- else
+  %table.table.table-hover.table-bordered
+    - unless current_user.admin
+      %h5.pull-right.text-info=request.path==request_index_path ? 'Заявку можно редактировать и удалить только первые 30 минут' : ''
+    %tr.info
+      %th № п/п
+      %th Тема
+      %th Сообщение
+      %th=request.path==request_index_path ? 'Дата создания' : 'Дата закрытия'
+      %th Действия
+    - @requests.each_with_index do |r, index|
+      %tr{id: "request_#{r.id}"}
+        %td
+          = index+1
+        %td
+          = Theme.where(id: r.theme_id).present? ? Theme.find(r.theme_id).name : 'Тема не найдена'
+        %td
+          = sanitize(r.message, :tags=>[]).truncate(150, :separator => " ").html_safe
+        %td=request.path==request_index_path ? (I18n.l (r.created_at+3.hour), format: :short) : (I18n.l (r.end_at+3.hour), format: :short)
+        %td
+          = link_to request_path(r), title: 'Просмотр', class: 'btn btn-primary' do
+            %i.fa.fa-search
+          - if !current_user.admin
+            - unless r.allow_update
+              = link_to edit_request_path(r), title: 'Редактировать', class: 'btn btn-info' do
+                %i.fa.fa-pencil
+          - unless current_user.admin
+            - unless r.allow_destroy
+              = link_to request_path(r), method: :delete, title: 'Удаление', class: 'btn btn-danger', data: { confirm: 'Вы уверены, что хотите удалить?' } do
+                %i.fa.fa-trash-o
+          - unless r.allow_closed
+            - if current_user.admin
+
+              -#= link_to closing_request_request_path(r), title: 'Закрыть заявку', class: 'btn btn-success', id: 'closed_btn_ticket', remote: true do
+              = link_to closing_request_request_path(r), method: :post, title: 'Закрыть заявку', class: 'btn btn-success', id: 'closed_btn_ticket' do
+                %i.fa.fa-check-square-o
+
+

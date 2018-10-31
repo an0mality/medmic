@@ -1,0 +1,22 @@
+.row{style: 'margin: 5%; margin-top: 10%; '}
+  .col-md-6.col-md-offset-3
+    .panel.panel-info
+      .panel-heading
+        %h3 Форма подтверждения адреса электронной почты
+      .panel-body
+        = form_for(resource, as: resource_name, url: confirmation_path(resource_name), html: { method: :post }) do |f|
+          = devise_error_messages!
+          .field
+            = f.label 'Введите логин, для которого хотите подтвердить адрес электронной почты'
+            %br/
+            = f.text_field :username, autofocus: true, class: 'form-control'
+            %br/
+          .actions
+            .pull-right
+              = f.submit "Отправить письмо", class: 'btn btn-sm btn-primary'
+          %br
+            .text-info После отправки письма, проверьте e-mail, на который был зарегистрирован логин
+
+
+
+

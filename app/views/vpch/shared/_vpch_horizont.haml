@@ -1,0 +1,95 @@
+-#- docs = LsdPatientDoc.where(indiv_id: patient)
+-#- passport = docs.where(type_id: 13).where(is_active: true).first
+- if @lsd_patient.present?
+  #rotate
+    %dive{style: "border: 8x solid black; width: 125mm;"}
+      .row{style: "font-size: 11px;"}
+        .col-md-12
+          %center
+            %strong
+              ГАУЗ КО «Калужский областной специализированный центр инфекционных заболеваний и  СПИД»  (г. Калуга, ул. Грабцевское шоссе,   д. 115, тел. 484-2-92-67-24)
+              %br
+              Клинико-диагностическая лаборатория
+              %br
+                %br
+
+              НАПРАВЛЕНИЕ НА ВЫЯВЛЕНИЕ ДНК 14 ГЕНОТИПОВ ВЫСОКОГО КАНЦЕРОГЕННОГО РИСКА ВИРУСА ПАПИЛЛОМЫ ЧЕЛОВЕКА (16,18,31,33,35,39,45,51,52,56,58,59,66,68) в клинических образцах (система ОМС).
+
+
+      .row{style: "font-size: 11px;"}
+        .col-md-12
+          %span ФИО
+          %ins #{@lsd_patient.full_name}
+          %p
+          %span Дата рождения(день, месяц, год)
+          %ins #{I18n.l @lsd_patient.birth_dt, format: '%d.%m.%Y'}
+          %span Пол
+          %ins женский
+          %p
+          %span Адрес
+          %ins #{@lsd_patient.address}
+          %p
+          %span Паспорт(серия)
+          - @lsd_patient.passport_doc.each do |passport|
+            %ins #{passport.blank? ? " " : passport[:series]}__, № _#{passport.blank? ? " " : passport[:number]}
+            %p
+            %span кем выдан
+            %ins #{passport.blank? ? "____________ " : passport[:issuer_text]}
+            %p
+            %span дата выдачи
+            %ins #{passport.blank? ? "_____________ " :passport[:issue_dt]}
+          %p
+          %span Полис ОМС номер
+          - @lsd_patient.polis_doc.each do |oms|
+            %ins #{oms[:number]}
+            %p
+            %span серия
+            %ins #{oms[:series]}
+            %span страх. компания
+            %ins #{oms[:org]}
+          %p
+          %span ЛПУ
+          %ins #{Organization.find(@analysis.organization_id).name}
+          %p
+          %span Врач, направивший на обслед.
+          %ins #{User.find(@analysis.user_id).fio}
+          %p
+          %span Дата забора материала:
+          %ins #{I18n.l @analysis.reception_at, format: '%d.%m.%Y'}
+          %p
+          %span Дата приема материала:
+          %ins ________________________
+          %table{style: "border: 1x solid black; width: 115mm;"}
+            %tbody
+              %tr{style: "border: 1px solid black"}
+                %td{style: "border: 1px solid black;"}
+                  .text-center № ОБРАЗЦА
+                %td{style: "border: 1px solid black"}
+                  .text-center РЕЗУЛЬТАТ
+                %td{style: "border: 1px solid black"}
+                  .text-center ИНТЕРПРЕТАЦИЯ
+                %td{style: "border: 1px solid black"}
+                  .text-center ПОЯСНЕНИЕ
+              %tr{style: "border: 1px solid black"}
+                %td{style: "border: 1px solid black"}
+                  &nbsp
+                  %p
+                %td{style: "border: 1px solid black"}
+                  &nbsp
+                %td{style: "border: 1px solid black"}
+                  &nbsp
+                %td{style: "border: 1px solid black"}
+                  &nbsp
+          %p
+          %span Идентификатор пациента
+          %ins #{@analysis.analys_key}
+          %p
+          %span Дата оформления результата материала:
+          %ins ________________________
+          %p
+          %span Врач:
+          %ins ___________________________________
+          %p
+          %span{style: "font-size: 8px;"} ВНИМАНИЕ! КАК В СЛУЧАЕ ЛЮБОГО ДИАГНОСТИЧЕСКОГО ТЕСТА, РЕЗУЛЬТАТЫ АНАЛИЗА Abbott RealTime HR HPV ДОЛЖНЫ ИНТЕРПРЕТИРОВАТЬСЯ В СОЧЕТАНИИ С ДРУГИМИ КЛИНИЧЕСКИМИ И ЛАБОРАТОРНЫМИ ПОКАЗАТЕЛЯМИ!
+          %p
+          %span{style: "font-size: 8px;"} Контактные лица: 

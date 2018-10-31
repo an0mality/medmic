@@ -1,0 +1,39 @@
+=render 'nav_hdbk'
+.row
+  .col-xs-12.col-md-12
+    .alert.alert-info.alert-dismissable
+      %button.close{"aria-hidden" => "true", "data-dismiss" => "alert", :type => "button"} &times;
+      %p Для внесения медработника в регистр следует заполнить форму, в которой требуется требуется ПРАВИЛЬНО указать специальность медработника.
+      %p Чтобы избежать ошибок рекомендуем сверить должность по справочникам.
+
+.row{style: 'margin-bottom: 5px;'}
+  .col-md-12
+    .form-group
+      -#=form_tag(request.path, method: 'get') do
+      = form_tag search_speciality_frmr_hdbk_index_path, method: :post, remote: true do
+        .col-md-2
+          .input-group
+            = text_field_tag :code,'', class: 'form-control', placeholder: 'Поиск по коду'
+            .input-group-btn
+              %i.fa.fa-angle-down.btn.btn-default{type: 'button',id: 'scode_sort', title: 'Сортировать по коду'}
+
+        .col-md-3
+          .input-group
+            = text_field_tag :name,'', class: 'form-control', placeholder: 'Поиск по наименованию'
+            .input-group-btn
+              %i.fa.fa-angle-down.btn.btn-default{type: 'button',id: 'sname_sort', title: 'Сортировать по наименованию'}
+        .col-md-2
+          = select_tag :type, options_for_select([['Уровень образования', 0],['Высшее', 1], ['Среднее специальное', 2]]), class: 'form-control', placeholder: 'Поиск по уровню образования'
+        .col-md-1
+          = submit_tag 'Поиск', class: 'btn  btn-primary', data: { 'disable-with' => 'Ищем...' }
+        .col-md-2
+          =link_to speciality_frmr_hdbk_index_path, class: 'btn btn-success' do
+            %i.fa.fa-list
+            Показать всех
+
+
+
+
+#list
+  =render 'list_s'
+

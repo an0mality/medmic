@@ -1,0 +1,9 @@
+На сайте появился новый пользователь: 
+%p ФИО: #{@user.fio},
+%p Логин: #{@user.username},
+%p E-mail: #{@user.email},
+-if @user.organization_id.present?
+  %p Организация: #{@user.organization.name}
+
+
+Установите ему права доступа к модулям, согласно приказу медицинской организации.

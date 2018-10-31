@@ -1,0 +1,10 @@
+-#-if @org.present?
+=form_for @org do
+  ИНН
+  = best_in_place @org, :inn, type: :input, path: update_org_ahd_path(@org.id), class: 'form-control'
+  %pКПП
+  = best_in_place @org, :kpp, type: :input, path: update_org_ahd_path(@org.id), class: 'form-control'
+
+  %p Тип организации
+  = best_in_place @org, :ahd_type_id, type: :select, :collection => AhdType.all.map{|a| [a[:id],a[:name]]}.to_h, path: update_org_ahd_path(@org.id), class: 'form-control'
+  фыв

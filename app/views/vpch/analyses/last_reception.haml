@@ -1,0 +1,45 @@
+.col-xs-12.col-md-12
+  = render 'vpch/shared/nav'
+  - if @last_reception.present?
+    - @last_reception.each do |last_reception|
+      %br
+      %center
+      %table.table.table-bordered{style: 'width: 100%;'}
+        %tr
+          %td{colspan:2}
+            %center
+              #{I18n. l last_reception.reception_at, format: '%d.%m.%Y'}
+        %tr
+          %td{colspan:2}
+            %center
+              - if Organization.where(id: last_reception.organization_id).present?
+                = Organization.find(last_reception.organization_id).name
+        %tr
+          %td
+            - if last_reception.cat_citology_id != nil || last_reception.cat_vpch_id != nil
+              #print_result
+                = render 'vpch/shared/form_show_diagnostic', form_last: last_reception, patient_info: @lsd_patient
+            - else
+              %tr
+                %td{colspan:2, class: (last_reception.cat_citology_id == nil || last_reception.cat_vpch_id == nil) ? "danger" : "success"}
+                  %center
+                    Результатов нет
+  - else
+    %h3 Прошлое посещение не было найдено
+
+:javascript
+      $('#print_btn').on('click', function(){
+        if (confirm('Распечатать страницу?')){
+            var printing_css='<style media=print>tr:nth-child(even) td{background: #f0f0f0;}</style>';
+            var html_to_print=printing_css+$('#print_result').html();
+            var iframe=$('<iframe id="print_frame">');
+            $('body').append(iframe);
+            var doc = $('#print_frame')[0].contentDocument || $('#print_frame')[0].contentWindow.document;
+            var win = $('#print_frame')[0].contentWindow || $('#print_frame')[0];
+            doc.getElementsByTagName('body')[0].innerHTML=html_to_print;
+            win.print();
+            $('iframe').remove();
+        }
+    });
+
+

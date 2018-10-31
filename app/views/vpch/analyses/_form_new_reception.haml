@@ -1,0 +1,63 @@
+=javascript_include_tag 'vpch/analyses'
+=javascript_include_tag 'autocomplete-rails.js'
+.container-fluid.form_first
+%br
+  %em
+    %center Заполните поля направления
+= simple_form_for(Analysis.new, url: vpch_analyses_path, :method => 'post') do |f|
+  -group_age = Analysis.group_age(params[:lsd_id], Time.now)
+  -analys_key = Registry.generate_key_analys(current_user.organization_id,(Analysis.last.present? ? Analysis.last.id.next : 1))
+  %input{name: "analysis[patient_id]", type: "hidden", value: params[:lsd_id]}
+  %input{name: "analysis[group_age]", type: "hidden", value: group_age}
+  %input{name: "analysis[analys_key]", type: "hidden", value: analys_key}
+  %input{name: "href", type: "hidden", value: params[:controller]}
+  -#%input{name: "to", type: "hidden", value: 'onko'}
+
+  .row.well
+    %strong
+      %center
+        %u Визуальный осмотр
+    Отметьте галочкой, если визуально выявлены заболевания шейки матки
+    = f.check_box :visual, {}, true
+  .row.well
+    %strong
+      %center
+        %u Первичный диагноз
+    %br
+    .col-md-12
+      = label_tag 'Введите код по МКБ-10'
+      .text-danger Введите 2 символа кода без пробела, например Z0, далее выберите из выпадающего списка
+      = autocomplete_field_tag :mkb_handbook_code,'', autocomplete_mkb_handbook_code_vpch_analyses_path, placeholder: 'Введите хотя бы 2 символа кода по МКБ-10 латиницей',class: 'form-control'
+    %br
+    .col-md-12
+      %br
+      = label_tag 'Название диагноза'
+      %span.form-control
+        #diagnostic_first
+          = @diagnostic_first
+  .row.well
+    %strong
+      %center
+        %u Данные о пациенте
+      .col-md-6
+        = label_tag 'Дата последней менструации'
+        = f.text_field :last_menstruation_date, placeholder: 'Щелкните по полю для выбора даты', class: 'form-control'
+      .col-md-6
+        =label_tag 'Менопауза (лет)'
+        = f.text_field :menopause, placeholder: 'Введите значение',class: 'form-control'
+  .row.well
+    %strong
+      %center
+        %u Проводимое лечение
+      = f.text_area :therapy, placeholder: 'Опишите проводимое лечение', class: 'form-control'
+  .row.well
+    %strong
+      %center
+        %u Соскоб получен (выберите)
+    .col-md-6
+      = f.select(:scraping, options_for_select((Analysis::SCRAPING_TYPE.map{ |h| [h[1][:name], h[0]]})),{}, {class: 'form-control'})
+  .row-fluid
+    .col-md-12
+      .pull-right
+        = f.submit 'Печать направления', class: "btn btn-primary"
+        = f.submit 'Печать направления на Цитологию', class: "btn btn-success"

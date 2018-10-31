@@ -1,0 +1,8 @@
+%ul.nav.nav-tabs
+  %li{class: params[:act].blank? ? "active": " "}
+    = link_to "Новые реестры", vpch_result_index_path
+  - if current_user.spid
+    %li{class: params[:act]== 'taken' ? "active": " "}
+      = link_to "Принятые реестры", vpch_result_index_path(act: 'taken')
+  %li{class: params[:act]== 'closed' ? "active": " "}
+    = link_to "Закрытые реестры", vpch_result_index_path(act: 'closed')

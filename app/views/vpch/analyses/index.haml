@@ -1,0 +1,16 @@
+
+.col-xs-12.col-md-12
+  .alert.alert-info.alert-dismissable
+    %button.close{"aria-hidden" => "true", "data-dismiss" => "alert", :type => "button"} &times;
+    В цитологическом скрининге принимают участие пациенты в возрасте от 21 до 69 лет.
+    -#%p Инcтрукцию по работе с модулем вы можете скачать #{link_to 'по ссылке', 'http://10.2.1.248/bank_documents/81?download=true'}
+    %br
+  = form_tag(request.path, method: "get", class: "form-horizontal") do
+    .input-group
+      = text_field_tag :index, params[:index],{"data-toggle" => "tooltip", "data-original-title" => "Введите первые буквы фамилии, имени, отчества и год рождения без пробелов. Например, если вы ищете Иванова Анна Михайловна с датой рождения 21.03.1988г., то вы можете ввести следующие варианты: 'иам21031988','иам21.03.1988', 'иам', 'иа', 'и', '21.03.1988'.", placeholder: "Для поиска пациента нажмите здесь...",class: "form-control tip-bottom"}
+      = hidden_field_tag :vpch, 'one'
+      %span.input-group-btn
+        = submit_tag "Поиск", class: "btn btn-default"
+
+#patient_table
+  =render 'patient_table'

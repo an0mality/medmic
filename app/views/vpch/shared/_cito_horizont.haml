@@ -1,0 +1,99 @@
+- if @lsd_patient.present?
+  - if @analysis.present?
+    #rotateCito
+      #cut_analysis
+        .row
+          .pull-right
+            %center
+              = @analysis.analys_key
+              %p
+              %strong
+              #{@lsd_patient.full_name}
+      %br
+        %br
+      .row
+        .col-md-12
+          %center
+            = Organization.find(current_user.organization_id).name
+            %p
+            НАПРАВЛЕНИЕ
+            %p
+            на цитологическое исследование и результат исследования материала,
+            %p
+            полученного при скрининге рака шейки матки
+      %br
+        %br
+      .row
+        .col-md-12
+          %ol
+            %li
+              %span.s1 Ф.И.О. (полностью):
+              %ins #{@lsd_patient.full_name}
+            %p
+            %li
+              %span Дата рождения
+              %ins #{I18n.l @lsd_patient.birth_dt, format: '%d.%m.%Y'}
+            %p
+            %li
+              - @lsd_patient.polis_doc.each do |oms|
+                %span Страховая компания
+                %ins #{oms[:org]}
+                %p
+                %span.s1 № страхового полиса
+                %ins #{oms[:number]}
+                Серия
+                %ins #{oms[:series]}
+            %li
+              %span Адрес пациентки:
+              %ins #{@lsd_patient.address}
+
+              %li
+                -if @analysis.mkb_handbook_id.present?
+                  %span Диагноз (при направлении на цитологическое исследование):
+                  %ins #{MkbHandbook.find(@analysis.mkb_handbook_id).description}
+                  %p
+                  %span Код по МКБ-10:
+                  %ins #{MkbHandbook.find(@analysis.mkb_handbook_id).code}
+                - else
+                  %span Диагноз (при направлении на цитологическое исследование):_____
+                  %p
+                  %span ___________________________________________________________
+                  %p
+                  %span Код по МКБ-10 _______________
+              %li
+                -if @analysis.last_menstruation_date.present?
+                  %span Дата последней менструации:
+                  %ins #{@analysis.last_menstruation_date.strftime("%d.%m.%Y")}
+                -elsif @analysis.menopause.present?
+                  %span Менопауза
+                  %ins #{@analysis.menopause}
+                  %span лет
+                -else
+                  %span Дата последней менструации:________________  Менопауза _____ лет
+              %li
+                - if @analysis.therapy.present?
+                  %span Проводимое лечение:
+                  %ins #{@analysis.therapy}
+                - else
+                  %span.s1 Проводимое лечение ______________________
+                  %p
+                  %span.s1 _________________________________________
+              %li
+                %span.s1 Соскоб получен:
+                %ins #{@analysis.scraping_name}
+            %p
+            %p
+            %p
+            %span Дата взятия биологического материала
+            %ins #{I18n.l Analysis.last.reception_at, format: '%d.%m.%Y', style: "text-decoration: underline;"}
+            %p
+            %span Ф.И.О, врача (акушерки), направляющих материал:
+            %p
+            %ins #{User.find(@analysis.user_id).fio}
+            %p
+            %span Идентификатор пациента
+            %ins #{@analysis.analys_key}
+            %p
+            Подпись ____________________
+
+

@@ -1,0 +1,17 @@
+.pull-right
+  =link_to 'Как работать с конвертором АХД?', ahd_howdo_path, target: :blank, class: 'btn btn-sm btn-warning'
+=form_tag ahd_convert_path, method: :post, :multipart => true do
+
+  =label_tag :filename, 'Выберите файл ПФ'
+  =file_field_tag :file, class: 'btn btn-primary'
+
+  %br
+  .inline
+    =label_tag :inn, 'Выберите тип медицинской организации'
+    %span=select_tag :org_type, options_for_select(['Автономное', 'Бюджетное', 'Казенное']), class: 'form-control'
+
+  =label_tag :inn, 'Введите ИНН'
+  %span=text_field_tag :inn,'', class: 'form-control'
+  =label_tag :kpp, 'Введите КПП'
+  %span=text_field_tag :kpp, '',class: 'form-control'
+  =submit_tag 'Обработать', class: 'btn btn-primary'

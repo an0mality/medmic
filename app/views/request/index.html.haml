@@ -1,0 +1,20 @@
+.row
+  .col-md-8.col-md-offset-3
+    %h3 Мои заявки администратору
+  - unless current_user.admin
+    .row
+      .col-md-3
+        = render 'sidebar'
+      .col-md-9
+        = render 'head'
+    .row
+      .col-md-9.col-md-offset-3
+        = render 'list'
+  - else
+    .row
+      .col-md-12
+        = render 'head'
+    .row
+      .col-md-12
+        #table
+          = render 'list'

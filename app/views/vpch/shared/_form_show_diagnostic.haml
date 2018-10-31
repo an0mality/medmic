@@ -1,0 +1,131 @@
+-#- form_last  = @form_last.last
+-#- patient_info = LsdPatient.patient_info(params[:id])
+%br
+.well
+    %center
+        %h4 Пациентка #{patient_info.full_name}, #{I18n.l patient_info.birth_dt, format: '%d.%m.%Y'} г.р. (#{patient_info.full_age})
+
+    %br
+    %h4 Данные первого посещения
+    %li.p3
+        Дата взятия биологического материала для скрининга
+        %u #{I18n. l form_last.reception_at, format: '%d.%m.%Y'}
+    %li.p3
+
+
+        - if form_last.visual == true
+            %u Визуально выявлено заболевание шейки матки
+        - else
+            %u Заболевание шейки матки визуально не выявлено
+    - if form_last.last_menstruation_date.present?
+        %li.p3
+            Дата последней менструации
+            %u #{I18n. l form_last.last_menstruation_date, format: '%d.%m.%Y'}
+    - if form_last.menopause.present?
+        %li.p3
+            Менопауза
+            %u #{form_last.menopause}
+            лет
+    - if form_last.mkb_handbook_id.present? && MkbHandbook.where(id: form_last.mkb_handbook_id).present?
+        %li.p3
+            Предварительный диагноз по скринингу:
+            %br
+                %div{style: "margin-left: 55px;"}
+                    Код по МКБ=10:
+                    %u #{MkbHandbook.find(form_last.mkb_handbook_id).code}.
+                    %br
+                    Название диагноза:
+                    %u #{MkbHandbook.find(form_last.mkb_handbook_id).description}
+
+    - if form_last.therapy.present?
+        %li.p3
+            Назначения:
+            %u #{form_last.therapy.html_safe}
+
+
+
+    %br
+    %h4 Данные результатов анализов
+
+    -if form_last.cat_vpch_id.present? && CatVpch.where(id: form_last.cat_vpch_id).present? && form_last.vpch_date.present?&& form_last.spid_confirm == true
+        %li.p3
+            ВПЧ (#{I18n.l form_last.vpch_date, format: '%d.%m.%Y'}):
+            %u #{form_last.cat_vpch.name} (#{form_last.cat_vpch.description})
+
+    -if form_last.cat_citology_id.present? && CatCitology.where(id: form_last.cat_citology_id).present? && form_last.onko_date.present?
+        %li.p3
+            Цитология (#{I18n.l form_last.onko_date, format: '%d.%m.%Y'}):
+            %u #{form_last.cat_citology.name} (#{form_last.cat_citology.description})
+
+
+
+
+    -if form_last.vpch_kolposkopy_id.present? && VpchKolposcopy.where(id: form_last.vpch_kolposkopy_id ).present?
+        %li.p3
+            Кольпоскопии
+            - if form_last.kolposkopy_date.present?
+                %span (#{I18n.l form_last.kolposkopy_date, format: '%d.%m.%Y'}):
+            %u  #{VpchKolposcopy.find(form_last.vpch_kolposkopy_id).name}.
+    -else
+        %li.p3 Кольпоскопия не проводилась
+
+
+    -if form_last.biopsia_date.present?
+        %li.p3
+            Биопсия шейки матки от #{I18n.l form_last.biopsia_date, format: '%d.%m.%Y'}
+
+    -else
+        %li.p3 Биопсия шейки матки не проводилась
+
+    -if form_last.vpch_gistology_id.present? && VpchGistology.where(id: form_last.vpch_gistology_id ).present?
+        %li.p3
+            Гистологии
+            - if form_last.gistology_date.present?
+                (#{I18n.l form_last.gistology_date, format: '%d.%m.%Y'}):
+            %u  #{VpchGistology.find(form_last.vpch_gistology_id).name}.
+    -else
+        %li.p3 Гистологическое исследование не проводилось
+
+
+    -if form_last.diagnostic_mkb_handbook_id.present? && MkbHandbook.where(id: form_last.diagnostic_mkb_handbook_id).present?
+        %li.p3
+            Клинический диагноз (окончательный):
+            %br
+                %div{style: "margin-left: 55px;"}
+                    %u #{MkbHandbook.find(form_last.diagnostic_mkb_handbook_id).description}
+                    %span . Код по МКБ-10:
+                    %u  #{MkbHandbook.find(form_last.diagnostic_mkb_handbook_id).code}.
+
+                    %br
+                - if form_last.diagnostic.present?
+                    %div{style: "margin-left: 55px;"}
+                        Описание диагноза:
+                        %u #{form_last.diagnostic.html_safe}
+
+
+
+
+    -if form_last.diagnostic_is_patology.present? && form_last.diagnostic_is_patology == true
+        %li.p3 Патология выявлена
+    - else
+        %li.p3 Патология не выявлена
+
+    - if form_last.diagnostic_therapy.present?
+        %li.p3
+            Назначения:
+            %u #{form_last.diagnostic_therapy.html_safe}
+
+
+    -if form_last.diagnostic_is_completed.present? && form_last.diagnostic_is_completed == true
+        %li.p3 Случай закончен
+    - else
+        %li.p3 Случай не закончен
+
+    -if form_last.diagnostic_next_visit.present?
+        %li.p3
+            Планируемый следующий визит:
+            %u #{I18n.l form_last.diagnostic_next_visit, format: '%d.%m.%Y'}
+    .pull-right
+        = link_to 'Печать бланка', '#', class:'btn btn-primary btn-sm', id: 'print_btn'
+
+

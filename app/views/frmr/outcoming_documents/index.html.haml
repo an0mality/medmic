@@ -1,0 +1,73 @@
+%center
+  %h3
+    %strong
+      Документы в МИАЦ
+    %p из #{current_user.organization.name} об изменениях в регистре врачей и фельдшеров
+
+.row
+  .col-xs-12.col-md-12
+    .alert.alert-info.alert-dismissable
+      %button.close{"aria-hidden" => "true", "data-dismiss" => "alert", :type => "button"} &times;
+      %p В разделе отображаются все документы (приказы), которые были отправлены в МИАЦ, касаемо внесения врачей и фельдшеров в регистр.
+      %p Обращаем внимание, что перед загрузкой документа (приказа) следует проверить: правильно ли указаны должность медработника и его специальность. Для проверки используйте «Справочники».
+      Только при отсутствии ошибок медработник будет внесён в регистр.
+      %p Для загрузки документа нажмите кнопку «Выбрать файл». Найдите на компьютере нужный файл (приказ, письмо или другой документ).Затем нажмите кнопку «Загрузить файл».
+      %p Для того, чтобы скачать файл, нажмите на его название.
+
+.panel.panel-success
+  .panel-heading
+    .pull-right
+      %h4{style: 'color: #777777'}Форма для загрузки документов
+    .panel-body
+      =form_tag upload_frmr_outcoming_documents_path,  multipart: true, remote: :true, class: "form-horizontal" do
+
+        =file_field_tag :file, :multiple => true, name: "attachments[]"
+        %br
+        =submit_tag 'Загрузить файл', class: "btn btn-primary"
+
+
+- if @documents.present?
+  .panel.panel-warning
+    .panel-heading
+      .panel-body
+        %table.table.table-hover.table-bordered
+          %caption
+            .pull-right
+              %h4 Документы в МИАЦ
+          %tr.info
+            %th.text-center №
+            %th.text-center Дата загрузки
+            %th.text-center Название документа
+            %th.text-center Статус документа, комментарии
+            %th.text-center Удаление
+          - @documents.each_with_index do |doc, index|
+            %tr
+              %td.text-center
+                = index+1
+              %td.text-center
+                %i.fa-fw.fa.fa-calendar
+                = I18n. l doc.created_at, format: '%d/%m/%Y'
+              %td
+                = link_to doc.filename, download_frmr_outcoming_document_path(doc), method: :get, title: 'Загрузка'
+              %td.text-center
+
+                Статус документа: #{doc.frmr_document_type.name}
+
+                -if doc.frmr_document_type_id==2
+                  .text-danger Позвоните в ГБУЗ КО "МИАЦ Калужской области" Гареевой Лилии Викторовне для уточнения причины отклонения документа по телефону (4842) 70-50-12 доб.22
+                -if doc.message.present? && doc.message != 'нет'
+                  %p.text-info Комментарий администратора: #{doc.message}
+              - if doc.frmr_document_type.id==1
+                %td.text-center
+                  = link_to frmr_outcoming_document_path(doc), method: :delete, title: 'Удаление', class: 'btn btn-danger', data: { confirm: 'Вы уверены, что хотите удалить?' } do
+                    %i.fa.fa-trash-o
+                    Удалить
+              - else
+                %td.text-center Файл уже обработан в МИАЦ. Удаление недоступно
+        %center= will_paginate @documents, previous_label: 'На предыдущую страницу', next_label: 'На следующую страницу'
+
+
+-else
+  .text-center.text-info Не добавлен ни один документ
+
+

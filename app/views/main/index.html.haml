@@ -1,0 +1,91 @@
+-if current_user.present?
+  .col-md-12
+    #modules
+      %h1.text-center
+        Добро пожаловать, #{current_user.fio}
+      %h3
+        %p
+          Закрытый медицинский информационный портал «Mednet», создан для работы сотрудников медицинских организаций и Министерства здравоохранения Калужской области.
+        %p Список модулей системы:
+        %h4
+          %p
+          %i.fa.fa-check
+          Регистр детей первого года жизни, получающих полноценное питание;
+          %p
+          %i.fa.fa-check
+          Модуль цервикального скрининга рака шейки матки с тестированием на вирус папилломы человека;
+          %p
+          %i.fa.fa-check
+          Реестр инвалидов и детей-инвалидов по исполнению индивидуальных программ реабилитации или абилитации;
+          %p
+          %i.fa.fa-check
+          Регистр врачей и фельдшеров, имеющих право выписки льготных рецептов;
+          %p
+          %i.fa.fa-check
+          Документы.
+          - if Document.open.present? && current_user.present? && !current_user.blocks?
+            %p
+            %i.fa.fa-check
+            Вам доступно:
+            = manual(current_user)
+          -#- open = Document.open
+          -#- ticket = Document.ticket
+          -#- if open.present?
+          -#  #{link_to 'инструкция вход в систему', document_path(open.id), target: :blank},
+          -#- if ticket.present?
+          -#  #{link_to 'инструкция по созданию заявок в тех.поддержку', document_path(ticket.id), target: :blank},
+          -#- if current_user.vpch || current_user.onko || current_user.spid
+          -#  - vpch = Document.vpch
+          -#  - if vpch.present?
+          -#    #{link_to 'инструкция для модуля ВПЧ', document_path(vpch.id), target: :blank}
+          -#- if current_user.mse && !current_user.mz
+          -#  - mse = Document.ipra_user
+          -#  - if mse.present?
+          -#    #{link_to 'инструкция для модуля ИПРА', document_path(mse.id), target: :blank}
+          -#- if current_user.mse && current_user.mz
+          -#  - mse_mz = Document.ipra_mz
+          -#  - if mse_mz.present?
+          -#    #{link_to 'инструкция для модуля ИПРА', document_path(mse_mz.id), target: :blank}
+          -#- if current_user.feed && !current_user.mz
+          -#  - feed = Document.feed_user
+          -#  - if feed.present?
+          -#    #{link_to 'инструкция для модуля Детское питание', document_path(feed.id), target: :blank}
+          -#- if current_user.feed && current_user.mz
+          -#  - feed_mz = Document.feed_mz
+          -#  - if feed_mz.present?
+          -#    #{link_to 'инструкция для модуля Детское питание', document_path(feed_mz.id), target: :blank}
+          -#- if current_user.moderator
+          -#  - moderator = Document.moder
+          -#  - if moderator.present?
+          -#    #{link_to 'инструкция для модуля Модератор', document_path(moderator.id), target: :blank}
+
+          %br
+            %br
+
+      %h4
+        %p
+        %i.fa.fa-phone
+        Телефон технической поддержки: (4842) 70-50-04 доб.36.
+        %p
+        %i.fa.fa-question-circle
+        Ваши вопросы и предложения по улучшению функционала присылайте на #{mail_to "pr@xxx.ru"}
+        %p
+        %i.fa.fa-info-circle
+        Дополнительную информацию по работе МИАЦ Калужской области вы можете найти на #{link_to "официальном сайте МИАЦ Калужской области", 'http://miac.kaluga.ru/'}
+
+-else
+  .col-md-12
+    #modules
+      %h1.text-center
+        Добро пожаловать, гость.
+      %h3
+        %p Для того, чтобы начать работать с системой, вам необходимо войти под своей учетной записью. Для этого нажмите кнопку "Вход в систему"
+        %p Если у вас нет учетной записи, то вам необходимо зарегистрироваться в системе. Для этого нажмите кнопку Вход в систему/Регистрация.
+        %p После заполнения всех полей формы регистрации, подтвердите адрес своей электронной почты и ждите, когда сотрудник ГБУЗ КО "МИАЦ Калужской области" даст вам необходимый уровень доступа в соответствии с приказом по доступу к персональным данным вашей МО, размещенном в системе Альфа Док.
+
+        %p
+          Инструкции по работе с разделами сайта находятся в разделе "Документы"
+        %p
+          Все вопросы вы можете задать по телефону технической поддержки (4842) 70-50-04 доб.36, либо по электронной почте #{mail_to "pr@xxx.ru"}
+        %p
+          Дополнительную информацию по работе МИАЦ Калужской области вы можете найти на #{link_to "официальном сайте МИАЦ Калужской области", 'http://miac.kaluga.ru/'}

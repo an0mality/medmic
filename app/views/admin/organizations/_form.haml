@@ -1,0 +1,35 @@
+.row
+  .col-md-12
+    .panel.panel-default
+      .panel-heading
+        =org_caption
+      .panel-body
+
+        = simple_form_for(action, url: url, method: meth, html: { class: 'form-horizontal' },wrapper: :horizontal_form) do |f|
+          .sssss{style: 'padding-left: 25px'}
+            = f.input :at_vpch, as: :boolean, checked_value: true, unchecked_value: false
+            = f.input :actual, as: :boolean, checked_value: true, unchecked_value: false
+
+          = f.input :name,  hint: 'Краткое наименование организации',placeholder: 'Введите наименование организации'
+          = f.input :full_name, as: :text,  hint: 'Полное наименование организации',placeholder: 'Введите полное наименование организации'
+
+          = f.input :city_id, as: :select, collection: City.order(:name).map{|e| [e.name, e.id]}, include_blank: 'Выберите территориальную принадлежность'
+          = f.input :type_org_id,as: :select, collection: TypeOrganization.order(:name).map{|e| [e.name, e.id]}, include_blank: 'Выберите тип организации'
+
+          = f.input :address,  hint: '248650, г. Калуга, ул. Вишневского, д.1 ', placeholder: 'Нажмите на поле и выберите нужную дату'
+
+          = f.input :tel_secretary,  hint: '8(4842)70-50-04', placeholder: 'Введите телефон секретаря'
+
+          = f.input :web_site,  hint: 'miac.kaluga.ru', placeholder: 'Введите адрес WEB-сайта организации'
+
+
+
+          = f.input :rhb_exc_id, as: :select, collection: RhbExc.order(:name).map{|e| [e.name, e.id]}, include_blank: 'Выберите организацию'
+          = f.input :frmr_organization_id, as: :select, collection: FrmrOrganization.order(:name).map{|e| [e.name, e.id]}, include_blank: 'Выберите организацию'
+
+
+
+          .sssss{style: 'padding-left: 25px'}
+            = link_to 'Вернуться к списку', admin_organizations_path, class: 'btn btn-warning'
+            = f.submit name_bottom, class: 'btn btn-primary'
+

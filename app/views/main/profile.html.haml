@@ -1,0 +1,54 @@
+-if @user.present?
+  .panel.panel-info
+    .panel-heading
+      .row
+        .col-md-12
+          .pull-right
+            %i.fa.fa-user-circle
+            Мой профиль
+    .panel-body
+      .row
+        .col-md-12
+          .pull-right.text-success Изменению подлежат поля, помеченные звездочкой*
+      %br
+      .row
+        .col-md-12
+          %i.fa.fa-user
+          %span.text-info ФИО:
+          %span= @user.fio
+      %p
+      .row
+        .col-md-12
+          %i.fa.fa-university
+          %span.text-info Наименование медицинской организации:
+          %span=current_user.organization.name
+      %p
+
+      .row
+        .col-md-12
+          %i.fa.fa-bullseye
+          %span.text-info Уровень доступа:
+          %span
+            -available_module(current_user).each do |a|
+              =a
+      %p
+      .row
+        .col-md-12
+          %i.fa.fa-list
+          %span.text-info Ваш логин
+          %span=current_user.username
+
+      %p
+      .row
+        .col-md-12
+          %i.fa.fa-envelope
+          %span.text-success Email*:
+          %span=best_in_place @user, :email, as: :input, url:update_user_main_path(@user)
+          %span (если вы забыли пароль, на этот адрес придет письмо с инструкцией по смене пароля)
+      %p
+      .row
+        .col-md-12
+          %i.fa.fa-phone-square
+          %span.text-success Контактный телефон*:
+          %span=best_in_place @user, :phone, as: :input, url: update_user_main_path(@user.id)
+          %span (указывайте ваш контактный телефон, чтобы нам было проще связаться с Вами)

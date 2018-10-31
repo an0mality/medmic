@@ -1,0 +1,38 @@
+%center
+  %h3
+    %strong
+      Ответные письма из МИАЦ
+    %p для #{current_user.organization.name} об изменениях в регистре врачей и фельдшеров
+.row
+  .col-xs-12.col-md-12
+    .alert.alert-info.alert-dismissable
+      %button.close{"aria-hidden" => "true", "data-dismiss" => "alert", :type => "button"} &times;
+      %p В разделе содержатся ответы МИАЦ о том, что медработник добавлен в регистр и ему присвоен соответствующий код.
+      %p Для того, чтобы скачать файл, нажмите на его название.
+
+- if @documents.present?
+  .panel.panel-warning
+    .panel-heading
+      .panel-body
+        %table.table.table-hover.table-bordered
+          %caption
+            .pull-right
+              %h4Ответное письмо от МИАЦ
+          %tr.info
+            %th.text-center №
+            %th.text-center Дата загрузки
+            %th.text-center Название документа
+          - @documents.each_with_index do |doc, index|
+            %tr
+              %td.text-center
+                =index+1
+              %td.text-center
+                %i.fa-fw.fa.fa-calendar
+                = I18n. l doc.created_at, format: '%d/%m/%Y'
+              %td=link_to doc.filename, download_frmr_incoming_document_path(doc), method: :post, title: 'Загрузка'
+        %center= will_paginate @documents, previous_label: 'На предыдущую страницу', next_label: 'На следующую страницу'
+-else
+  .text-center.text-info Для вас не добавлен ни один документ
+
+
+

@@ -1,0 +1,9 @@
+%p
+  Добрый день, #{@resource.fio}!
+- if @resource.try(:unconfirmed_email?)
+  %p
+    Вы получили это письмо,так как адрес вашей электронной почты меняется на #{@resource.unconfirmed_email}.
+- else
+  %p
+    Вы получили это письмо,так как адрес вашей электронной почты был изменен на #{@resource.email}.
+=render 'footer'

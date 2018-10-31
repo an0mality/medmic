@@ -1,0 +1,123 @@
+.row
+  .col-xs-1.col-md-1
+    %center
+      %p{style: "border: 1px solid black;"}
+        - if Registry.where(id: @patients.last.registry_id).present?
+          = Registry.where(id: @patients.last.registry_id).last.registry_key
+
+- if params[:go_to] == 'onko'
+  - title = "Реестр на оказание диагностической услуги 'Цитологическое исследование методом жидкостной цитологии' в рамках церквиального скрининга рака шейки матки"
+- elsif params[:go_to] == 'spid'
+  - title = "Реестр на оказание диагностической услуги 'Скрининг-тест для определения ДНК 14-ти типов ВПЧ высокого онкогенного риска c одновременным генотипированием 16-го и 18-го типов (валидированный)'"
+
+= hidden_field_tag :name_controller, params[:href]
+
+.row{style: "margin-top: 25px;"}
+  .col-md-12
+    Место печати ЛПУ
+.row
+%br
+.row
+  .col-xs-2.col-md-2
+  .col-xs-8.col-md-8
+    .pull-left
+      Наименование ЛПУ:
+      %u
+      = Organization.find(current_user.organization_id).name
+
+%br
+.row
+  .col-md-12
+    %center
+      %strong #{title}
+.row{style: "margin-top: 10px;"}
+
+  .col-md-12
+    %center
+      #table_registry
+        %table{:border => "1", :cellpadding => "0", :cellspacing => "0"}
+          %tbody
+            %tr
+              %th
+                %center
+                  Nп/п
+              %th
+                %center{style: "width: 50px;"}
+                  Спец. ключ
+              %th
+                %center
+                  Дата забора материала
+              %th
+                %center{style: "width: 30%;"}
+                  Фамилия Имя Отчество (полностью)
+              %th
+                %center
+                  Дата рождения (день/месяц/год)
+              %th
+                %center
+                  Адрес (город, улица, дом, кв.)
+              %th{style: "width: 2%;"}
+                %center
+                  Паспорт
+                  %p
+                  (серия, номер)
+              %th{style: "width: 2%;"}
+                %center
+                  Полис ОМС (номер, серия, дата выдачи, где выдан, страховая компания)
+            - @patients.each_with_index do |patient, index|
+              - patient_info = LsdPatient.find(patient.patient_id)
+              %tr
+                %td
+                  %center
+                    = index+1
+                %td
+                  %center
+                    = patient.analys_key
+                %td
+                  = I18n.l patient.reception_at, format: '%d.%m.%Y'
+                %td
+                  = patient_info.full_name
+                %td
+                  %center
+                    = I18n.l patient_info.birth_dt, format: '%d/%m/%Y'
+                %td{style: "width: 40%;"}
+                  = patient_info.address
+                %td
+                  = patient_info.list_identity_doc
+                %td
+                  - if patient_info.polis_doc.present?
+                    - patient_info.polis_doc.each do |polis|
+                      #{polis[:name]}, #{polis[:series]}, #{polis[:number]}, #{polis[:org]}
+
+.row{style: "margin-top: 40px;"}
+  .col-md-12
+    Дата оформления реестра:
+    %ins _____________
+    %span ФИО, должность и подпись оформителя: ___________________________________________
+
+:css
+  @media print {
+    @page { margin: 1mm; padding: 1mm; }
+    body { margin: 1cm; }
+    .header-left-top, .a-right-bottom, .time-right-bottom {display: none;}
+    #footer{display: none}
+  }
+  /*@media print {*/
+    /*@page { margin: 0; }*/
+    /*body { margin: 1.6cm; }*/
+  /*}*/
+
+
+:javascript
+  $(".spinner").hide();
+  window.print();
+  var controller = $('#name_controller').val()
+  if (controller == 'vpch/registries'){
+    window.location.href = '/vpch/registries'
+  }
+  else{
+    window.location.href = '/vpch/result'
+  }
+
+
+

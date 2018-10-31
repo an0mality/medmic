@@ -1,0 +1,38 @@
+=javascript_include_tag 'admin/frmr/hdbk/speciality.js'
+=render 'admin/share/nav_frmr_hdbk'
+%br
+.row{style: 'margin-bottom: 5px;'}
+  .col-md-12
+    .form-group
+      -#=form_tag(request.path, method: 'get') do
+      =form_tag search_admin_frmr_hdbk_speciality_index_path, method: :post, remote: true do
+        .col-md-3
+          .input-group
+            = text_field_tag :code,'', class: 'form-control', placeholder: 'Поиск по коду'
+            .input-group-btn
+              %i.fa.fa-angle-down.btn.btn-default{type: 'button',id: 'code_sort', title: 'Сортировать по коду'}
+
+        .col-md-3
+          .input-group
+            = text_field_tag :name,'', class: 'form-control', placeholder: 'Поиск по наименованию'
+            .input-group-btn
+              %i.fa.fa-angle-down.btn.btn-default{type: 'button',id: 'name_sort', title: 'Сортировать по наименованию'}
+        .col-md-3
+          = select_tag :type, options_for_select([['Выберите уровень образования', 0],['Высшее', 1], ['Среднее специальное', 2]]), class: 'form-control', placeholder: 'Поиск по уровню образования'
+
+        .col-md-3
+          = button_tag(type: 'submit', class: 'btn btn-primary', data: { 'disable-with' => 'Ищем...' }) do
+            %i.fa.fa-search
+            Поиск
+
+          =link_to admin_frmr_hdbk_speciality_index_path, class: 'btn btn-success' do
+            %i.fa.fa-list
+            Показать всех
+
+
+
+
+
+#list
+  =render 'list'
+

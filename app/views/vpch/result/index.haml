@@ -1,0 +1,34 @@
+=javascript_include_tag 'vpch/result'
+.col-xs-12.col-md-12
+  = render '/vpch/shared/nav_result'
+  %br
+    .row
+      = form_tag(request.path, method: "get", class: "form-horizontal") do
+        = hidden_field_tag :act, params[:act]
+        .col-md-3
+          = text_field_tag :registry_key, params[:registry_key],{"data-toggle" => "tooltip", "data-original-title" => "Введите номер реестра указанный вверхнем левом углу реестра",
+          class: "form-control tip-bottom", placeholder:'Укажите ключ'}
+        .col-md-4
+          = select_tag :registry_org, options_from_collection_for_select(Organization.where(id: Registry.pluck(:organization_id)).order(:name), 'id', 'name',
+          {selected: params[:registry_org]}), prompt:'Выберите организацию',class: 'form-control'
+        .col-md-3
+          =text_field_tag :index, params[:index], placeholder: "Для поиска пациента по ФИО нажмите здесь...",class: "form-control"
+          = hidden_field_tag :vpch, 'one'
+        .col-md-2
+          %span
+            = submit_tag "Поиск", class: "btn btn-default"
+            = link_to 'Сбросить поиск', vpch_result_index_path, class: "btn btn-sm btn-default"
+    %br
+
+    - if @registry.present?
+      - if current_user.spid && params[:act] == 'taken'
+        .row
+          .pull-right
+            =link_to send_taken_registry_vpch_result_index_path, method: :post, class: 'btn btn-sm btn-primary' do
+              %i.fa.fa-download
+              Скачать список
+
+      .row{style: "margin-top: 2%;"}
+        .pre-scrollable
+          #table
+            = render '/vpch/shared/table_registries'

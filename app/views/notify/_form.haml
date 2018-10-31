@@ -1,0 +1,103 @@
+-#= javascript_include_tag  'notify.js'
+= simple_form_for act, url: url , method: met do |f|
+  .row
+    .col-md-12
+      = label :role_or_user, 'Группы:'
+      .vis{style: 'color:#333'}
+        =f.collection_radio_buttons :all, [['feed', ' Питание |'] ,['mse', ' МСЭ |'], ['vpch', ' ВПЧ| '], ['rmis', ' Аптека/ФИФА| '], ['frmr', ' ФРМР| '], ['all', ' Все']], :first, :last
+      = label :role_or_user, 'Пользователи:'
+      = check_box_tag :user, 'true'
+      = f.select :recipient_user_id, options_from_collection_for_select(User.where(blocks: false).order(:fio), :id, :fio, opt1),{include_blank: true}, { class: 'form-control'}
+      = f.hidden_field :user_id, value: current_user.id
+      = f.hidden_field :theme_id, value: 5
+      %br
+  .row
+    .col-md-12
+      %br
+
+      = f.input :message, as: :ckeditor, input_html: { ckeditor: { toolbar: 'full' } }
+      -#as: :ckeditor, input_html: { ckeditor: { toolbar: 'mini' } }
+      %br
+  .row
+    .col-md-6
+      = label :begin_at,  'Дата начала оповещения'
+      = f.text_field :begin_at, placeholder: 'Нажмите на поле и выберите нужную дату', class: 'form-control sss'
+    .col-md-6
+      = label :end_at,  'Дата конца оповещения'
+      = f.text_field :end_at,  placeholder: 'Нажмите на поле и выберите нужную дату', class: 'form-control sss'
+      %br
+  .row
+    .col-md-12
+      %center
+      %br
+      = f.submit namebtn, class: 'btn btn-primary btn-lg btn-block', id: 'notify_message_btn_check'
+
+:javascript
+    $('#notify_message_btn_check').click(function () {
+        var val_all = $('#notify_message_all_all:checked').val();
+        val_feed = $('#notify_message_all_feed:checked').val();
+        val_mse = $('#notify_message_all_mse:checked').val();
+        val_vpch = $('#notify_message_all_vpch:checked').val();
+        val_rmis = $('#notify_message_all_rmis:checked').val();
+        val_frmr = $('#notify_message_all_frmr:checked').val();
+        val_user = $('#notify_message_recipient_user_id').val();
+        if (val_feed == 'feed' || val_mse == 'mse' || val_vpch == 'vpch' || val_all == 'all' || val_rmis == 'rmis' || val_frmr == 'frmr' || val_user >= 1) {
+            if ($('#notify_message_begin_at').val() == '' || $('#notify_message_end_at').val() == '') {
+                alert('Заполните все поля');
+                return false;
+            }
+            else {
+                alert('Все заполнено верно. Нажмите ОК');
+                return true;
+            }
+        } else {
+            alert('Выберите какой группе или пользователю писать.');
+            return false;
+        }
+    });
+
+    $('#notify_message_begin_at').datetimepicker({
+        language: 'ru',
+        format: "YYYY-MM-DD HH:mm"
+    });
+    $('#notify_message_end_at').datetimepicker({
+        language: 'ru',
+        format: "YYYY-MM-DD HH:mm"
+    });
+    $('#notify_message_begin_at').on("dp.change", function (e) {
+        console.log($('#notify_message_begin_at').data("DateTimePicker"));
+        $('#notify_message_end_at').data("DateTimePicker").setMinDate(e.date);
+    });
+    $('#notify_message_end_at').on("dp.change", function (e) {
+        console.log($('#notify_message_end_at').data("DateTimePicker"));
+        $('#notify_message_begin_at').data("DateTimePicker").setMaxDate(e.date);
+    });
+
+    $(function Selected() {
+        var a = $('#notify_message_recipient_user_id').val();
+        if (a >= 1) {
+            $('#notify_message_recipient_user_id').show();
+        }
+        else {
+            $('#notify_message_recipient_user_id').hide();
+        }
+    });
+
+
+    $('.vis').change(function () {
+        $('#notify_message_recipient_user_id').hide();
+        $('#user').prop('checked', false);
+        $('#notify_message_recipient_user_id').val('');
+    });
+    $('#user').change(function () {
+        $('#user').prop('checked', true);
+        $('#notify_message_all_feed').prop("checked", false);
+        $('#notify_message_all_vpch').prop("checked", false);
+        $('#notify_message_all_mse').prop("checked", false);
+        $('#notify_message_all_rmis').prop("checked", false);
+        $('#notify_message_all_frmr').prop("checked", false);
+        $('#notify_message_all_all').prop("checked", false);
+        $('#notify_message_recipient_user_id').show();
+
+    });
+

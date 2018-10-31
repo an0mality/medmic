@@ -1,0 +1,69 @@
+.row{style: 'margin: 5%; margin-top: 10%; '}
+  .col-md-6.col-md-offset-3
+    .panel.panel-primary
+      .panel-heading
+        %h3 Регистрация в системе
+      .panel-body
+        = form_for(resource, as: resource_name, url: registration_path(resource_name)) do |f|
+          = devise_error_messages!
+          %br/
+          .field
+            = f.label :email
+            = f.email_field :email, autofocus: true, class: 'form-control'
+          .field
+            = f.label :fio
+            %br/
+            = f.text_field :fio, autofocus: true, class: 'form-control'
+          .field
+            = f.label :username
+            %br/
+            = f.text_field :username, autofocus: true, class: 'form-control'
+          .field
+            = f.label :password
+            - if @minimum_password_length
+              %em
+                (#{@minimum_password_length} characters minimum)
+            %br/
+            = f.password_field :password, autocomplete: "off", class: 'form-control'
+          .field
+            = f.label :password_confirmation
+            %br/
+            = f.password_field :password_confirmation, autocomplete: "off", class: 'form-control'
+          .field
+            = f.label :organization_id
+            %br/
+
+            = f.select('organization_id', Organization.all.collect{|p| [p.name, p.id]}, {prompt:'Укажите организацию'}, {class: 'form-control'})
+            %br/
+
+          -#  = f.select('organization_id', Organization.actual.order(:name).collect{|p| [p.name, p.id]}, {prompt:'Укажите организацию'}, {class: 'form-control'})
+          -#%br/
+
+          .field
+            =f.label :phone
+            =f.text_field :phone, autofocus: true, class: 'form-control'
+            %br/
+          .field
+            =f.check_box :consent_to_the_processing_of_personal_data
+            %span
+              %strong Я согласен на передачу данных в соответствии с политикой в отношении обработки персональных данных
+          %p
+            = link_to 'Политика в отношении обработки персональных данных', "http://miac.kaluga.ru/Politika.pdf", target: "blank"
+          %br
+          -#.field
+          -#  =f.label 'Укажите желаемые модули для доступа'
+          -#.form-inline
+          -#  =label_tag 'Детское питание'
+          -#  =check_box_tag :feed
+          -#  |
+          -#  =label_tag 'ВПЧ'
+          -#  =check_box_tag :vpch
+          -#  |
+          -#  =label_tag 'ИПРА инвалидов'
+          -#  =check_box_tag :mse
+          .actions
+            .pull-left
+              = link_to '< На главную', root_path, class: 'btn btn-default'
+            .pull-right
+              = f.submit "Регистрация", class: 'btn btn-primary'
+

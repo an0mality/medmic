@@ -1,0 +1,42 @@
+-#= render 'vpch/shared/sidebar'
+
+.col-xs-12.col-md-12
+  = render 'vpch/shared/nav'
+  %br
+  .alert.alert-success.alert-dismissable
+    %button.close{"aria-hidden" => "true", "data-dismiss" => "alert", :type => "button"} &times;
+    В карте посещения добавлен функционал печати направления только на Цитологию.
+  - if  @lsd_patient.snils_doc.blank? || @lsd_patient.polis_doc.blank? || @lsd_patient.passport_doc.blank? || @lsd_patient.address.blank?
+    %h3{style: "color: red;"}
+      Недостаточно данных о пациенте для дальнейшей работы.
+    -if @lsd_patient.snils_doc.blank?
+      %h4.text-danger Введите данные о СНИЛС пациента в программу РМИС
+    %br
+    -if @lsd_patient.polis_doc.blank?
+      %h4.text-danger Введите данные о полисе пациента в программу РМИС
+    %br
+    -if @lsd_patient.passport_doc.blank?
+      %h4.text-danger Введите данные о паспортных данных пациента в программу РМИС
+    %br
+    -if @lsd_patient.address.blank?
+      %h4.text-danger Введите данные об адресе проживания пациента в программу РМИС
+  - else
+    - if @last_reception.present?
+      - if (@last_reception.last.diagnostic_next_visit.blank? && Time.now - @last_reception.last.reception_at < 1.year) || @last_reception.last.diagnostic_next_visit.present? && @last_reception.last.diagnostic_next_visit.to_datetime > Time.now
+        - if @form_last.present?
+          = render 'form_analyses'
+        - else
+          %em Пациент в течение этого года проходил скрининг. Данные вы найдете во вкладке 'Предыдущие посещения'
+      - else
+        - if (@lsd_patient.full_age >= 21 || @lsd_patient.full_age <= 69) && @lsd_patient.gender_id == 2
+          = render 'form_new_reception'
+        - else
+          .text-info.text-center Пациент не попадает в программу скрининга рака шейки матки по половым или возрастным критериям.
+    - else
+      - if (@lsd_patient.full_age >= 21 || @lsd_patient.full_age <= 69) && @lsd_patient.gender_id == 2
+        = render 'form_new_reception'
+      - else
+        .text-info.text-center Пациент не попадает в программу скрининга рака шейки матки по половым или возрастным критериям. В скрининге участвуют только женщины в возрасте от 21 до 69 лет.
+
+
+

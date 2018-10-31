@@ -1,0 +1,16 @@
+-if a.present?
+  Данные в таблице на #{DateTime.now.strftime('%d/%m/%Y')}
+  %table.table.table-bordered
+    %tr.info
+      %th Организация
+      %th Сотрудник
+      %th Кол-во переходов по ссылкам
+    - a.keys.each do |org|
+      - a[org].each do |fio|
+        %tr
+          -#%td{rowspan: @a[org].size}
+          %td
+            = org
+          %td
+            =fio[0]
+          %td=fio[1]

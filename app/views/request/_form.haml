@@ -1,0 +1,47 @@
+.row
+  .col-md-12
+    #request_form
+      .pull-right.text-info *Ваша заявка будет рассмотрена в течение 1 часа
+
+      %br
+        .row
+          .col-md-12
+
+            -if @request.errors.any?
+              .text-info.text-center При создании сообщения найдены ошибки
+              %br
+              - @request.errors.to_a.each do |msg|
+                .text-danger=msg
+                %p
+
+      = simple_form_for act, url: url, method: met do |f|
+        .row
+          .col-md-12
+            = label :theme_id,'Выберите тему:'
+            = f.select :theme_id, options_from_collection_for_select(Theme.all, :id, :name, { :selected => @request.theme_id}),{}, { class: 'form-control'}
+        %br
+        .row
+          .col-md-12
+            = f.input :message, as: :ckeditor, input_html: { ckeditor: { toolbar: 'mini' } }
+            -#= f.text_area :message,  class: 'redactor', placeholder: 'Опишите возникшую проблему'
+            = f.hidden_field :begin_at
+            = f.hidden_field :end_at
+            = f.hidden_field :user_id, value: current_user.id
+        %br
+        .row
+          .col-md-6
+            = label :email,'Email:'
+            -#= f.text_field :email, value: current_user.email,disabled: "disabled",  class: 'form-control'
+            = text_field_tag :email, current_user.email,  class: 'form-control'
+          .col-md-6
+            = label_tag :phone,'Введите ДЕЙСТВУЮЩИЙ контактный телефон, чтобы мы могли связаться с Вами:', class: 'text_color'
+            = text_field_tag :phone, current_user.phone, class: 'form-control'
+            %br
+        .row
+          .col-md-12
+            = f.submit namebtn, class: 'btn btn-primary btn-lg btn-block', id: 'notify_message_btn_zayavka'
+
+:javascript
+  $('#notify_message_theme_id option:last').remove();
+
+  

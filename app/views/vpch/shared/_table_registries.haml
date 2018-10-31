@@ -1,0 +1,128 @@
+-if params[:index].blank?
+  - if @analyses.present?
+    Количество пациентов вне реестре:
+    %strong #{@analyses.count}
+    %br
+  - if @registry.present?
+    %br
+    %table.table.table-bordered
+      %tr
+        %th.text-center №
+        %th
+          %center.text_table
+            Ключ
+        %th
+          %center.text_table
+            Дата начала периода
+        %th
+          %center.text_table
+            Дата окончания периода
+        %th
+          %center.text_table
+            Кол-во пациентов в реестре
+        - unless current_user.vpch
+          %th.text-center Организация
+        %th{colspan: 3}
+          %center.text_table
+            Операции
+      - @registry.each_with_index do |registr, index|
+        %tr{data_id: registr.id}
+          %td.text-center
+            - if params[:act]=='taken'
+              = best_in_place registr, :spid_sent_number, as: :input, url: vpch_result_path(registr), class: 'form-control'
+            - else
+              = index+1
+          %td.text-center
+            = registr.registry_key
+          %td
+            =I18n.l registr.date_begin, format: :long
+          %td
+            =I18n.l registr.date_end, format: :long
+          %td.text-center
+            = Analysis.where(registry_id: registr.id).count
+          - if current_user.vpch
+            %td
+              = link_to vpch_registry_path(registr.id), class: "btn btn-sm btn-success" do
+                %i.fa.fa-search
+                Посмотреть
+            %td
+              -# передача параметра href - параметр controller_name для редиректа после печати
+              = link_to print_vpch_registry_path(registr.id, go_to: 'onko', href: params[:controller]), class: "btn btn-sm btn-primary" do
+                %i.fa.fa-print
+                Печать (в онкодиспансер)
+              = link_to print_vpch_registry_path(registr.id, go_to: 'spid', href: params[:controller]), class: "btn btn-sm btn-primary" do
+                %i.fa.fa-print
+                Печать (в ЦСПИД)
+          - else
+            %td.text-center
+              = Organization.find(registr.organization_id).name
+          - if current_user.admin
+            %td.text-center
+              = link_to "Расформировать реестр", disband_registry_vpch_registry_path(registr), class: "btn btn-sm btn-danger"
+          - unless current_user.vpch
+            %td.text-center
+              = link_to "Открыть реестр", vpch_result_path(registr), class: "btn btn-sm btn-success"
+              - if current_user.onko || current_user.spid
+
+                = link_to print_vpch_registry_path(registr.id, href: params[:controller]), class: "btn btn-sm btn-primary" do
+                  %i.fa.fa-print
+                  Печать
+              =form_tag send_spid_registry_vpch_result_index_path, method: :post, remote: true do
+                - if current_user.spid && params[:act].blank?
+                  =hidden_field_tag :registry_id, registr.id
+                  %p
+                  =submit_tag 'Отправить реестр на регистрацию', class: 'btn btn-sm btn-danger'
+
+  - else
+    .text-info По вашему запросу ничего не найдено или у вас не создано ни одного реестра
+- elsif params[:index].present?
+  - if @search_name.blank? && params[:commit].present?
+    .text-info.text-center По вашему запросу ничего не найдено, попробуйте еще раз
+  - elsif @search_name.present? && params[:commit].present?
+    .text-center.text-info Результаты поиска по запросу "#{params[:index]}"
+    %br
+    %table.table.table-bordered
+      %tr.info
+        %th.text-center ФИО
+        %th.text-center Ключ анализа
+        %th.text-center Дата рождения
+        %th.text-center Адрес
+        %th.text-center Паспорт
+        %th.text-center Полис
+        %th.text-center Номер реестра
+      -@search_name.each do |search_result|
+        - patient_info = LsdPatient.patient_info(search_result.patient_id)
+        -unless patient_info.nil?
+          - individual = patient_info.address
+        %tr
+          %td
+            =patient_info.full_name
+          %td
+            = search_result.analys_key
+          %td
+            = I18n.l patient_info.birth_dt, format: "%d.%m.%Y"
+          %td
+            = individual.present? ? individual : "Не указан"
+          %td
+            - if patient_info.passport_doc.present?
+              - patient_info.passport_doc.each do |passport|
+                #{passport[:series]}, #{passport[:number]}, #{passport[:name]}
+          %td
+            - if patient_info.polis_doc.present?
+              - patient_info.polis_doc.each do |polis|
+                #{polis[:name]}, #{polis[:series]}, #{polis[:number]}, #{polis[:org]}
+
+          %td
+            =link_to vpch_result_path(id: search_result.registry_id), class: "btn btn-sm btn-primary",:target => "blank" do
+              %i.fa.fa-arrow-circle-o-right
+              =search_result.registry_id
+            %br
+              %br
+            = link_to print_vpch_registry_path(id: search_result.registry_id, href: params[:controller] ), class: "btn btn-sm btn-primary",:target => "blank" do
+              %i.fa.fa-print
+              Печать
+
+:javascript
+    $(".spinner").hide();
+
+

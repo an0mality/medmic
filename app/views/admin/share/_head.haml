@@ -1,0 +1,9 @@
+.col-md-9
+  %ul.nav.nav-tabs
+    %li{class: request.path == admin_sectors_path ? "active" : ""}
+      = link_to "Участки", admin_sectors_path
+    %li{class: request.path == admin_doctors_path ? "active" : ""}
+      = link_to "Врачи", admin_doctors_path
+    %li{class: request.path == admin_food_index_path ? "active" : ""}
+      = link_to "Наборы", admin_food_index_path
+  %br
